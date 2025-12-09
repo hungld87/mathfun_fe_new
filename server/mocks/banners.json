@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Khám Phá Toán Tư Duy Cùng MathFun",
+    "description": "Học toán tư duy một cách vui nhộn và hiệu quả cho học sinh lớp 1-5",
+    "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&h=400&fit=crop",
+    "slug": "kham-pha-toan-tu-duy",
+    "link_internal": "/courses"
+  },
+  {
+    "id": 2,
+    "title": "Luyện Đề Cùng Thầy Cô Giỏi",
+    "description": "Chuẩn bị cho kỳ thi với những bài luyện tập chuyên sâu từ đội ngũ giáo viên uy tín",
+    "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=400&fit=crop",
+    "slug": "luyen-de-cung-thay-co",
+    "link_internal": "/practice"
+  },
+  {
+    "id": 3,
+    "title": "Thư Viện Tài Liệu Học Tập",
+    "description": "Truy cập ngàn tài liệu chất lượng cao từ các chuyên gia giáo dục hàng đầu",
+    "image": "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=1200&h=400&fit=crop",
+    "slug": "tai-lieu-hoc-tap",
+    "link_internal": "/documents"
+  },
+  {
+    "id": 4,
+    "title": "Đội Ngũ Giáo Viên Tận Tâm",
+    "description": "Học cùng đội ngũ giáo viên giàu kinh nghiệm, tận tâm và yêu nghề",
+    "image": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&h=400&fit=crop",
+    "slug": "doi-ngu-giao-vien",
+    "link_internal": "/courses"
+  },
+  {
+    "id": 5,
+    "title": "Tin Tức Giáo Dục Mới Nhất",
+    "description": "Cập nhật những tin tức, xu hướng giáo dục toán học hiện đại nhất",
+    "image": "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=1200&h=400&fit=crop",
+    "slug": "tin-tuc-giao-duc",
+    "link_internal": "/news"
+  }
+]

@@ -1,0 +1,248 @@
+{
+  "header": {
+    "logo": {
+      "text": "MATHFUN",
+      "sub_text": "",
+      "icon": "M",
+      "link": "/"
+    },
+    "search": {
+      "placeholder": "Tìm kiếm khóa học, bài tập, tài liệu...",
+      "enabled": true
+    },
+    "navigation": [
+      {
+        "id": 1,
+        "title": "Trang chủ",
+        "slug": "/",
+        "icon": "🏠"
+      },
+      {
+        "id": 2,
+        "title": "Khoá học",
+        "slug": "/courses",
+        "icon": "📚"
+      },
+      {
+        "id": 3,
+        "title": "Luyện đề",
+        "slug": "/practice",
+        "icon": "✍️"
+      },
+      {
+        "id": 4,
+        "title": "Tài liệu",
+        "slug": "/documents",
+        "icon": "📄"
+      },
+      {
+        "id": 5,
+        "title": "Tin tức",
+        "slug": "/news",
+        "icon": "📰"
+      },
+      {
+        "id": 6,
+        "title": "Khuyến mãi HOT",
+        "slug": "/promotion",
+        "icon": "🔥",
+        "is_highlight": true
+      }
+    ],
+    "buttons": {
+      "login": {
+        "text": "Đăng nhập",
+        "enabled": true
+      },
+      "consultation": {
+        "text": "Yêu cầu tư vấn",
+        "enabled": true
+      }
+    }
+  },
+  "footer": {
+    "brand": {
+      "name": "MathFun",
+      "slogan": "Học Toán Thông Minh - Tư Duy Sáng Tạo",
+      "description": "MathFun là nền tảng giáo dục toán học trực tuyến hàng đầu dành cho học sinh tiểu học, giúp các em phát triển tư duy logic và yêu thích môn toán."
+    },
+    "contact": {
+      "address": "123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh",
+      "phone": "1900 xxxx",
+      "email": "contact@mathfun.vn",
+      "working_hours": "T2 - T7: 8:00 - 20:00, CN: 8:00 - 17:00"
+    },
+    "navigation": {
+      "title": "Liên Kết",
+      "items": [
+        {
+          "id": 1,
+          "title": "Trang chủ",
+          "slug": "/"
+        },
+        {
+          "id": 2,
+          "title": "Giới thiệu",
+          "slug": "/about"
+        },
+        {
+          "id": 3,
+          "title": "Khoá học",
+          "slug": "/courses"
+        },
+        {
+          "id": 4,
+          "title": "Luyện đề",
+          "slug": "/practice"
+        },
+        {
+          "id": 5,
+          "title": "Tin tức",
+          "slug": "/news"
+        },
+        {
+          "id": 6,
+          "title": "Liên hệ",
+          "slug": "/contact"
+        }
+      ]
+    },
+    "resources": {
+      "title": "Tài Nguyên",
+      "items": [
+        {
+          "id": 1,
+          "title": "Tài liệu học tập",
+          "slug": "/documents"
+        },
+        {
+          "id": 2,
+          "title": "Video bài giảng",
+          "slug": "/videos"
+        },
+        {
+          "id": 3,
+          "title": "Đề thi Violympic",
+          "slug": "/violympic"
+        },
+        {
+          "id": 4,
+          "title": "Hỏi đáp",
+          "slug": "/qa"
+        },
+        {
+          "id": 5,
+          "title": "Blog",
+          "slug": "/blog"
+        }
+      ]
+    },
+    "policies": {
+      "title": "Chính Sách",
+      "items": [
+        {
+          "id": 1,
+          "title": "Điều khoản sử dụng",
+          "slug": "/terms"
+        },
+        {
+          "id": 2,
+          "title": "Chính sách bảo mật",
+          "slug": "/privacy"
+        },
+        {
+          "id": 3,
+          "title": "Chính sách hoàn tiền",
+          "slug": "/refund"
+        },
+        {
+          "id": 4,
+          "title": "Hướng dẫn thanh toán",
+          "slug": "/payment-guide"
+        }
+      ]
+    },
+    "newsletter": {
+      "title": "Đăng Ký Nhận Tin",
+      "description": "Nhận thông tin về khóa học mới và ưu đãi đặc biệt",
+      "placeholder": "Email của bạn",
+      "button_text": "Đăng ký",
+      "enabled": true
+    },
+    "social": {
+      "title": "Kết Nối Với Chúng Tôi",
+      "links": [
+        {
+          "id": 1,
+          "name": "Facebook",
+          "url": "https://facebook.com/mathfun",
+          "icon": "facebook"
+        },
+        {
+          "id": 2,
+          "name": "YouTube",
+          "url": "https://youtube.com/mathfun",
+          "icon": "youtube"
+        },
+        {
+          "id": 3,
+          "name": "Twitter",
+          "url": "https://twitter.com/mathfun",
+          "icon": "twitter"
+        },
+        {
+          "id": 4,
+          "name": "Instagram",
+          "url": "https://instagram.com/mathfun",
+          "icon": "instagram"
+        },
+        {
+          "id": 5,
+          "name": "TikTok",
+          "url": "https://tiktok.com/@mathfun",
+          "icon": "tiktok"
+        }
+      ]
+    },
+    "copyright": {
+      "text": "© 2024 MathFun. All rights reserved.",
+      "company": "Công ty TNHH Giáo Dục MathFun"
+    },
+    "certifications": [
+      {
+        "id": 1,
+        "name": "Đã đăng ký Bộ Công Thương",
+        "image": "/images/cert-bct.png"
+      },
+      {
+        "id": 2,
+        "name": "Chứng nhận ISO 9001:2015",
+        "image": "/images/cert-iso.png"
+      }
+    ]
+  },
+  "seo": {
+    "default_title": "MathFun - Học Toán Thông Minh",
+    "default_description": "Nền tảng học toán trực tuyến hàng đầu cho học sinh tiểu học. Phương pháp giảng dạy hiện đại, giáo viên giàu kinh nghiệm.",
+    "default_keywords": "học toán, toán tư duy, violympic, toán tiểu học, học online",
+    "og_image": "https://mathfun.vn/og-image.jpg"
+  },
+  "theme": {
+    "primary_color": "#3FB3AA",
+    "primary_dark_color": "#359A91",
+    "secondary_color": "#FF6B35",
+    "success_color": "#27AE60",
+    "warning_color": "#F39C12",
+    "error_color": "#E74C3C",
+    "teal_50": "#F0FDFA",
+    "teal_100": "#CCFBF1",
+    "teal_500": "#14B8A6",
+    "teal_600": "#0D9488"
+  },
+  "features": {
+    "maintenance_mode": false,
+    "show_promotion_banner": true,
+    "enable_chat_support": true,
+    "enable_notifications": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "mathfun-nuxt3",
+  "version": "1.0.0",
+  "description": "MathFun — Nuxt 3 SSR Educational Website",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.0.0",
+    "@nuxtjs/tailwindcss": "^6.0.0",
+    "@pinia/nuxt": "^0.4.3",
+    "axios": "^1.13.2",
+    "msw": "^1.2.3",
+    "nuxt": "^3.10.0",
+    "nuxt-simple-sitemap": "^4.3.1",
+    "pinia": "^2.1.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

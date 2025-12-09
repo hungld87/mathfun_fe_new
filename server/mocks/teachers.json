@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Nguyễn Văn A",
+    "image": "https://via.placeholder.com/200x200?text=Teacher+1",
+    "description": "Giáo viên toán tư duy với 10 năm kinh nghiệm"
+  },
+  {
+    "id": 2,
+    "name": "Trần Thị B",
+    "image": "https://via.placeholder.com/200x200?text=Teacher+2",
+    "description": "Chuyên gia trong lĩnh vực giáo dục toán học"
+  },
+  {
+    "id": 3,
+    "name": "Lê Văn C",
+    "image": "https://via.placeholder.com/200x200?text=Teacher+3",
+    "description": "Huấn luyện viên đội tuyển toán quốc tế"
+  }
+]

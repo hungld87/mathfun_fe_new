@@ -1,0 +1,98 @@
+[
+  {
+    "id": 1,
+    "title": "Toán Tư Duy Lớp 1",
+    "slug": "toan-tu-duy-lop-1",
+    "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=400&fit=crop",
+    "description": "Khóa học toán tư duy dành cho học sinh lớp 1, giúp bé phát triển tư duy logic và yêu thích môn toán",
+    "level": "Cơ bản",
+    "lessons": 20,
+    "class": "Lớp 1",
+    "isHot": true
+  },
+  {
+    "id": 2,
+    "title": "Toán Tư Duy Lớp 2",
+    "slug": "toan-tu-duy-lop-2",
+    "image": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=1200&h=400&fit=crop",
+    "description": "Khóa học toán tư duy dành cho học sinh lớp 2, nâng cao khả năng tư duy và giải quyết vấn đề",
+    "level": "Cơ bản",
+    "lessons": 25,
+    "class": "Lớp 2",
+    "isHot": true
+  },
+  {
+    "id": 3,
+    "title": "Toán Tư Duy Lớp 3",
+    "slug": "toan-tu-duy-lop-3",
+    "image": "https://images.unsplash.com/photo-1596496050755-c923e73e42e1?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1596496050755-c923e73e42e1?w=1200&h=400&fit=crop",
+    "description": "Khóa học toán tư duy dành cho học sinh lớp 3, rèn luyện tư duy logic và khả năng phân tích",
+    "level": "Trung bình",
+    "lessons": 30,
+    "class": "Lớp 3",
+    "isHot": true
+  },
+  {
+    "id": 4,
+    "title": "Toán Nâng Cao Lớp 4",
+    "slug": "toan-nang-cao-lop-4",
+    "image": "https://images.unsplash.com/photo-1590402494587-44b71d7772f6?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1590402494587-44b71d7772f6?w=1200&h=400&fit=crop",
+    "description": "Khóa học toán nâng cao cho lớp 4, chuẩn bị cho các kỳ thi học sinh giỏi",
+    "level": "Nâng cao",
+    "lessons": 35,
+    "class": "Lớp 4",
+    "isHot": false
+  },
+  {
+    "id": 5,
+    "title": "Violympic Toán Lớp 5",
+    "slug": "violympic-toan-lop-5",
+    "image": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=1200&h=400&fit=crop",
+    "description": "Khóa học luyện thi Violympic toán quốc tế dành cho học sinh lớp 5",
+    "level": "Chuyên sâu",
+    "lessons": 40,
+    "class": "Lớp 5",
+    "isHot": true
+  },
+  {
+    "id": 6,
+    "title": "Tiếng Anh Toán Học Lớp 3",
+    "slug": "tieng-anh-toan-hoc-lop-3",
+    "image": "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=1200&h=400&fit=crop",
+    "description": "Học toán bằng tiếng Anh, phát triển đồng thời tư duy toán học và ngoại ngữ",
+    "level": "Trung bình",
+    "lessons": 28,
+    "class": "Lớp 3",
+    "isHot": false
+  },
+  {
+    "id": 7,
+    "title": "Toán Hình Học Lớp 4",
+    "slug": "toan-hinh-hoc-lop-4",
+    "image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&h=400&fit=crop",
+    "description": "Khóa học chuyên sâu về hình học, giúp học sinh nắm vững các khái niệm không gian",
+    "level": "Nâng cao",
+    "lessons": 32,
+    "class": "Lớp 4",
+    "isHot": false
+  },
+  {
+    "id": 8,
+    "title": "Toán Ứng Dụng Lớp 5",
+    "slug": "toan-ung-dung-lop-5",
+    "image": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=300&h=200&fit=crop",
+    "cover_image": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1200&h=400&fit=crop",
+    "description": "Áp dụng toán học vào thực tế, giải quyết các bài toán trong cuộc sống hàng ngày",
+    "level": "Nâng cao",
+    "lessons": 38,
+    "class": "Lớp 5",
+    "isHot": false
+  }
+]

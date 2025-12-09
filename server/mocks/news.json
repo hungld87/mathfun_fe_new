@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "title": "10 Bí Quyết Học Toán Hiệu Quả Cho Học Sinh",
+    "slug": "10-bi-quyet-hoc-toan-hieu-qua",
+    "description": "Khám phá những phương pháp học toán thông minh giúp học sinh nắm vững kiến thức và đạt điểm cao trong kỳ thi",
+    "content": "Học toán không chỉ là ghi nhớ công thức mà còn là rèn luyện tư duy logic. Bài viết này sẽ chia sẻ 10 bí quyết giúp các em học toán hiệu quả hơn, từ việc lập kế hoạch học tập đến phương pháp ghi nhớ thông minh.",
+    "thumb": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=400&fit=crop",
+    "cover": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=1200&h=400&fit=crop",
+    "author": "Thầy Nguyễn Văn An",
+    "datetime": "2024-11-30",
+    "tags": ["toán học", "học tập", "phương pháp"]
+  },
+  {
+    "id": 2,
+    "title": "Cách Chuẩn Bị Cho Kỳ Thi Toán Học Kỳ",
+    "slug": "cach-chuan-bi-ki-thi-toan",
+    "description": "Hướng dẫn chi tiết từ A-Z giúp học sinh tự tin bước vào phòng thi với sự chuẩn bị tốt nhất",
+    "content": "Kỳ thi toán luôn là nỗi lo lắng của nhiều học sinh. Bài viết này sẽ hướng dẫn các em cách ôn tập hiệu quả, quản lý thời gian làm bài, và những lưu ý quan trọng trong ngày thi.",
+    "thumb": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=400&fit=crop",
+    "cover": "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=400&fit=crop",
+    "author": "Cô Trần Thị Bình",
+    "datetime": "2024-11-29",
+    "tags": ["thi cử", "ôn tập", "toán học"]
+  },
+  {
+    "id": 3,
+    "title": "Toán Học Trong Cuộc Sống Hàng Ngày",
+    "slug": "toan-hoc-trong-cuoc-song",
+    "description": "Khám phá những ứng dụng thú vị của toán học trong đời sống thường ngày mà bạn chưa từng để ý",
+    "content": "Toán học không chỉ tồn tại trên sách vở mà còn xuất hiện khắp nơi quanh ta. Từ việc tính toán chi tiêu hàng ngày đến thiết kế kiến trúc, toán học đóng vai trò quan trọng trong mọi lĩnh vực.",
+    "thumb": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=400&fit=crop",
+    "cover": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&h=400&fit=crop",
+    "author": "Thầy Lê Minh Cường",
+    "datetime": "2024-11-28",
+    "tags": ["toán học", "ứng dụng", "cuộc sống"]
+  },
+  {
+    "id": 4,
+    "title": "5 Sai Lầm Thường Gặp Khi Học Toán",
+    "slug": "5-sai-lam-thuong-gap-khi-hoc-toan",
+    "description": "Tránh những sai lầm phổ biến này để tiến bộ nhanh chóng trong việc học toán",
+    "content": "Nhiều học sinh mắc phải những sai lầm cơ bản khi học toán mà không hề hay biết. Bài viết này sẽ chỉ ra 5 sai lầm phổ biến nhất và cách khắc phục hiệu quả.",
+    "thumb": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=400&h=400&fit=crop",
+    "cover": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=1200&h=400&fit=crop",
+    "author": "Cô Phạm Thu Hà",
+    "datetime": "2024-11-27",
+    "tags": ["toán học", "học tập", "kinh nghiệm"]
+  },
+  {
+    "id": 5,
+    "title": "Hướng Dẫn Làm Bài Tập Toán Nâng Cao Lớp 8",
+    "slug": "bai-tap-toan-nang-cao-lop-8",
+    "description": "Giải chi tiết các dạng bài tập toán nâng cao lớp 8 với phương pháp dễ hiểu",
+    "content": "Toán lớp 8 nâng cao đòi hỏi học sinh phải có tư duy logic tốt. Series bài viết này sẽ hướng dẫn chi tiết từng dạng bài tập, kèm theo ví dụ minh họa cụ thể.",
+    "thumb": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=400&fit=crop",
+    "cover": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=1200&h=400&fit=crop",
+    "author": "Thầy Hoàng Văn Dũng",
+    "datetime": "2024-11-26",
+    "tags": ["lớp 8", "nâng cao", "bài tập"]
+  },
+  {
+    "id": 6,
+    "title": "Câu Chuyện Về Những Nhà Toán Học Nổi Tiếng",
+    "slug": "cau-chuyen-nha-toan-hoc-noi-tieng",
+    "description": "Khám phá cuộc đời và những đóng góp vĩ đại của các nhà toán học thay đổi thế giới",
+    "content": "Từ Pythagoras với định lý nổi tiếng đến Alan Turing - cha đẻ của khoa học máy tính, những nhà toán học này đã để lại dấu ấn không thể phai mờ trong lịch sử nhân loại.",
+    "thumb": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=400&fit=crop",
+    "cover": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=400&fit=crop",
+    "author": "Cô Nguyễn Thị Mai",
+    "datetime": "2024-11-25",
+    "tags": ["lịch sử", "nhà toán học", "truyền cảm hứng"]
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "teachers": {
+    "title": "Đội Ngũ Giáo Viên Tài Năng",
+    "icon": "👨‍🏫",
+    "description": "Đội ngũ giáo viên giàu kinh nghiệm, tận tâm với học sinh"
+  },
+  "courses": {
+    "title": "Khoá Học Nổi Bật",
+    "icon": "📚",
+    "description": "Các khóa học chất lượng cao được thiết kế cho từng lớp học"
+  },
+  "leaderboard": {
+    "title": "Bảng Xếp Hạng Tuần Này",
+    "icon": "🏆",
+    "description": "Top học sinh xuất sắc nhất trong tuần"
+  },
+  "news": {
+    "title": "Tin Tức Nổi Bật",
+    "icon": "📰",
+    "description": "Cập nhật tin tức mới nhất về giáo dục"
+  }
+}

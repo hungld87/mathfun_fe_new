@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "title": "Luyện đề Toán - Cộng trừ trong phạm vi 100",
+    "description": "Bài luyện đề tổng hợp các dạng bài cộng trừ trong phạm vi 100, phù hợp cho học sinh lớp 1 và lớp 2",
+    "class": "Lớp 1",
+    "subject": "Toán",
+    "topic": "Cộng trừ",
+    "thumb": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 2,
+    "title": "Luyện đề Toán - Nhân chia số có 1 chữ số",
+    "description": "Rèn luyện kỹ năng nhân chia cơ bản với các số có 1 chữ số, kèm theo bài tập thực hành",
+    "class": "Lớp 2",
+    "subject": "Toán",
+    "topic": "Nhân chia",
+    "thumb": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 3,
+    "title": "Luyện đề Toán - Hình học cơ bản",
+    "description": "Nhận biết các hình cơ bản: hình vuông, hình tròn, hình tam giác, hình chữ nhật",
+    "class": "Lớp 1",
+    "subject": "Toán",
+    "topic": "Hình học",
+    "thumb": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 4,
+    "title": "Luyện đề Toán - Đo lường chiều dài",
+    "description": "Làm quen với các đơn vị đo chiều dài: cm, m, km và cách đo lường trong thực tế",
+    "class": "Lớp 2",
+    "subject": "Toán",
+    "topic": "Đo lường",
+    "thumb": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 5,
+    "title": "Luyện đề Toán - Tư duy logic cơ bản",
+    "description": "Phát triển tư duy logic qua các bài toán đếm, sắp xếp, phân loại",
+    "class": "Lớp 1",
+    "subject": "Toán",
+    "topic": "Logic",
+    "thumb": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 6,
+    "title": "Luyện đề Toán - Phép cộng nâng cao",
+    "description": "Bài tập nâng cao về phép cộng có nhớ, phép cộng nhiều số",
+    "class": "Lớp 3",
+    "subject": "Toán",
+    "topic": "Cộng trừ",
+    "thumb": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 7,
+    "title": "Luyện đề Toán - Chia số có 2 chữ số",
+    "description": "Luyện tập phép chia số có 2 chữ số, chia có dư",
+    "class": "Lớp 3",
+    "subject": "Toán",
+    "topic": "Nhân chia",
+    "thumb": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 8,
+    "title": "Luyện đề Toán - Chu vi và diện tích",
+    "description": "Tính chu vi và diện tích các hình cơ bản: hình vuông, hình chữ nhật",
+    "class": "Lớp 3",
+    "subject": "Toán",
+    "topic": "Hình học",
+    "thumb": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 9,
+    "title": "Luyện đề Toán - Đo lường thời gian",
+    "description": "Học cách đọc đồng hồ, tính toán thời gian, đổi đơn vị thời gian",
+    "class": "Lớp 2",
+    "subject": "Toán",
+    "topic": "Đo lường",
+    "thumb": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 10,
+    "title": "Luyện đề Toán - Bài toán logic nâng cao",
+    "description": "Giải các bài toán logic phức tạp hơn, yêu cầu tư duy sáng tạo",
+    "class": "Lớp 3",
+    "subject": "Toán",
+    "topic": "Logic",
+    "thumb": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 11,
+    "title": "Luyện đề Toán - Phân số cơ bản",
+    "description": "Làm quen với khái niệm phân số, so sánh và tính toán với phân số đơn giản",
+    "class": "Lớp 4",
+    "subject": "Toán",
+    "topic": "Cộng trừ",
+    "thumb": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 12,
+    "title": "Luyện đề Toán - Nhân chia số thập phân",
+    "description": "Rèn luyện kỹ năng nhân chia với số thập phân",
+    "class": "Lớp 4",
+    "subject": "Toán",
+    "topic": "Nhân chia",
+    "thumb": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 13,
+    "title": "Luyện đề Toán - Hình tròn và đường tròn",
+    "description": "Tìm hiểu về hình tròn, bán kính, đường kính, tính chu vi hình tròn",
+    "class": "Lớp 4",
+    "subject": "Toán",
+    "topic": "Hình học",
+    "thumb": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 14,
+    "title": "Luyện đề Toán - Đo lường khối lượng",
+    "description": "Các đơn vị đo khối lượng: g, kg, tấn và cách đổi đơn vị",
+    "class": "Lớp 3",
+    "subject": "Toán",
+    "topic": "Đo lường",
+    "thumb": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 15,
+    "title": "Luyện đề Toán - Toán tư duy Olympic",
+    "description": "Các bài toán Olympic dành cho học sinh giỏi, kích thích tư duy",
+    "class": "Lớp 4",
+    "subject": "Toán",
+    "topic": "Logic",
+    "thumb": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 16,
+    "title": "Luyện đề Toán - Số nguyên âm",
+    "description": "Làm quen với số nguyên âm, so sánh và thực hiện các phép tính",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Cộng trừ",
+    "thumb": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 17,
+    "title": "Luyện đề Toán - Tỷ lệ và phần trăm",
+    "description": "Tính toán tỷ lệ phần trăm, ứng dụng trong bài toán thực tế",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Nhân chia",
+    "thumb": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 18,
+    "title": "Luyện đề Toán - Thể tích hình hộp",
+    "description": "Tính thể tích hình hộp chữ nhật, hình lập phương",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Hình học",
+    "thumb": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 19,
+    "title": "Luyện đề Toán - Đơn vị đo diện tích",
+    "description": "Các đơn vị đo diện tích: cm², m², km² và cách đổi đơn vị",
+    "class": "Lớp 4",
+    "subject": "Toán",
+    "topic": "Đo lường",
+    "thumb": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 20,
+    "title": "Luyện đề Toán - Bài toán chuyển động",
+    "description": "Giải bài toán chuyển động: quãng đường, vận tốc, thời gian",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Logic",
+    "thumb": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 21,
+    "title": "Luyện đề Toán - Quy tắc dấu ngoặc",
+    "description": "Thực hiện phép tính có dấu ngoặc đơn, dấu ngoặc kép",
+    "class": "Lớp 3",
+    "subject": "Toán",
+    "topic": "Cộng trừ",
+    "thumb": "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 22,
+    "title": "Luyện đề Toán - Bội số và ước số",
+    "description": "Tìm bội số, ước số, bội chung, ước chung của các số",
+    "class": "Lớp 4",
+    "subject": "Toán",
+    "topic": "Nhân chia",
+    "thumb": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 23,
+    "title": "Luyện đề Toán - Hình thoi và hình bình hành",
+    "description": "Tính chu vi, diện tích hình thoi và hình bình hành",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Hình học",
+    "thumb": "https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 24,
+    "title": "Luyện đề Toán - Đo lường dung tích",
+    "description": "Các đơn vị đo dung tích: lít, ml và cách đổi đơn vị",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Đo lường",
+    "thumb": "https://images.unsplash.com/photo-1453749024858-4bca89bd9edc?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  },
+  {
+    "id": 25,
+    "title": "Luyện đề Toán - Toán nâng cao lớp 5",
+    "description": "Tổng hợp các dạng bài toán nâng cao dành cho học sinh lớp 5",
+    "class": "Lớp 5",
+    "subject": "Toán",
+    "topic": "Logic",
+    "thumb": "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=400&h=300&fit=crop",
+    "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+  }
+]

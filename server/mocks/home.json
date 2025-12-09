@@ -1,0 +1,185 @@
+{
+  "hero_slide": [
+    {
+      "id": 1,
+      "title": "Khám Phá Toán Học Thú Vị",
+      "description": "Học toán không còn là nỗi lo với phương pháp giảng dạy hiện đại, sinh động",
+      "image": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=1200&h=500&fit=crop",
+      "slug": "kham-pha-toan-hoc",
+      "link_internal": "/courses"
+    },
+    {
+      "id": 2,
+      "title": "Đội Ngũ Giáo Viên Chuyên Nghiệp",
+      "description": "Giáo viên giàu kinh nghiệm, tận tâm với từng học sinh",
+      "image": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&h=500&fit=crop",
+      "slug": "doi-ngu-giao-vien",
+      "link_internal": "/courses"
+    },
+    {
+      "id": 3,
+      "title": "Luyện Tập Mọi Lúc Mọi Nơi",
+      "description": "Hệ thống bài tập đa dạng, phù hợp với từng trình độ",
+      "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=500&fit=crop",
+      "slug": "luyen-tap",
+      "link_internal": "/practice"
+    },
+    {
+      "id": 4,
+      "title": "Học Tập Hiệu Quả Với AI",
+      "description": "Công nghệ AI hỗ trợ cá nhân hóa lộ trình học tập",
+      "image": "https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?w=1200&h=500&fit=crop",
+      "slug": "hoc-tap-ai",
+      "link_internal": "/courses"
+    },
+    {
+      "id": 5,
+      "title": "Cộng Đồng Học Tập Sôi Động",
+      "description": "Kết nối với hàng nghìn học sinh trên toàn quốc",
+      "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=500&fit=crop",
+      "slug": "cong-dong",
+      "link_internal": "/news"
+    }
+  ],
+  "title_block_teacher": "Đội Ngũ Giáo Viên Tài Năng",
+  "block_teacher_icon": "👨‍🏫",
+  "teachers": [
+    {
+      "id": 1,
+      "name": "Thầy Nguyễn Văn A",
+      "image": "https://i.pravatar.cc/300?img=12",
+      "description": "15 năm kinh nghiệm giảng dạy Toán Tiểu học"
+    },
+    {
+      "id": 2,
+      "name": "Cô Trần Thị B",
+      "image": "https://i.pravatar.cc/300?img=45",
+      "description": "Chuyên gia Toán tư duy, Thạc sĩ Giáo dục"
+    },
+    {
+      "id": 3,
+      "name": "Thầy Lê Văn C",
+      "image": "https://i.pravatar.cc/300?img=33",
+      "description": "Giáo viên xuất sắc cấp Thành phố 2023"
+    }
+  ],
+  "title_block_courses": "Khoá Học Nổi Bật",
+  "block_courses_icon": "📚",
+  "courses": [
+    {
+      "id": 1,
+      "title": "Toán Tư Duy Lớp 1",
+      "slug": "toan-tu-duy-lop-1",
+      "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop",
+      "cover_image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=400&fit=crop",
+      "description": "Khóa học toán tư duy dành cho học sinh lớp 1",
+      "level": "Cơ bản",
+      "lessons": 24,
+      "class": "Lớp 1",
+      "isHot": true
+    },
+    {
+      "id": 2,
+      "title": "Toán Nâng Cao Lớp 3",
+      "slug": "toan-nang-cao-lop-3",
+      "image": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=400&h=300&fit=crop",
+      "cover_image": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=800&h=400&fit=crop",
+      "description": "Chương trình toán nâng cao cho học sinh lớp 3",
+      "level": "Nâng cao",
+      "lessons": 36,
+      "class": "Lớp 3",
+      "isHot": true
+    },
+    {
+      "id": 3,
+      "title": "Luyện Thi Violympic Lớp 5",
+      "slug": "luyen-thi-violympic-lop-5",
+      "image": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=400&h=300&fit=crop",
+      "cover_image": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&h=400&fit=crop",
+      "description": "Khóa học luyện thi Violympic chuyên sâu",
+      "level": "Chuyên sâu",
+      "lessons": 48,
+      "class": "Lớp 5",
+      "isHot": false
+    }
+  ],
+  "title_block_rank": "Bảng Xếp Hạng Tuần Này",
+  "block_rank_icon": "🏆",
+  "rank": [
+    {
+      "id": 1,
+      "rank": 1,
+      "name": "Nguyễn Minh Anh",
+      "score": 9850,
+      "avatar": "https://i.pravatar.cc/100?img=1"
+    },
+    {
+      "id": 2,
+      "rank": 2,
+      "name": "Trần Hoàng Long",
+      "score": 9720,
+      "avatar": "https://i.pravatar.cc/100?img=2"
+    },
+    {
+      "id": 3,
+      "rank": 3,
+      "name": "Lê Phương Thảo",
+      "score": 9680,
+      "avatar": "https://i.pravatar.cc/100?img=3"
+    },
+    {
+      "id": 4,
+      "rank": 4,
+      "name": "Phạm Đức Anh",
+      "score": 9550,
+      "avatar": "https://i.pravatar.cc/100?img=4"
+    },
+    {
+      "id": 5,
+      "rank": 5,
+      "name": "Vũ Khánh Linh",
+      "score": 9420,
+      "avatar": "https://i.pravatar.cc/100?img=5"
+    }
+  ],
+  "title_block_news": "Tin Tức Nổi Bật",
+  "block_news_icon": "📰",
+  "news": [
+    {
+      "id": 1,
+      "title": "10 Mẹo Học Toán Hiệu Quả Cho Học Sinh Tiểu Học",
+      "slug": "10-meo-hoc-toan-hieu-qua",
+      "description": "Khám phá những phương pháp học toán thông minh giúp con học tập hiệu quả hơn",
+      "content": "Nội dung chi tiết bài viết...",
+      "thumb": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=300&h=200&fit=crop",
+      "cover": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1200&h=600&fit=crop",
+      "author": "Nguyễn Văn A",
+      "datetime": "2024-01-15T10:30:00",
+      "tags": ["Phương pháp học", "Toán học", "Tiểu học"]
+    },
+    {
+      "id": 2,
+      "title": "Violympic 2024: Hướng Dẫn Đăng Ký Và Thi Đấu",
+      "slug": "violympic-2024-huong-dan",
+      "description": "Thông tin chi tiết về cuộc thi Violympic năm 2024",
+      "content": "Nội dung chi tiết bài viết...",
+      "thumb": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=300&h=200&fit=crop",
+      "cover": "https://images.unsplash.com/photo-1509869175650-a1d97972541a?w=1200&h=600&fit=crop",
+      "author": "Trần Thị B",
+      "datetime": "2024-01-14T09:15:00",
+      "tags": ["Violympic", "Thi đấu", "Hướng dẫn"]
+    },
+    {
+      "id": 3,
+      "title": "Khuyến Mãi Lớn: Giảm 50% Khóa Học Toán Tư Duy",
+      "slug": "khuyen-mai-giam-50-phan-tram",
+      "description": "Chương trình ưu đãi đặc biệt dành cho học viên mới",
+      "content": "Nội dung chi tiết bài viết...",
+      "thumb": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=300&h=200&fit=crop",
+      "cover": "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1200&h=600&fit=crop",
+      "author": "Lê Văn C",
+      "datetime": "2024-01-13T14:20:00",
+      "tags": ["Khuyến mãi", "Ưu đãi"]
+    }
+  ]
+}
