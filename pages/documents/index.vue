@@ -106,15 +106,15 @@ const getYouTubeEmbedUrl = (url: string) => {
       
       <!-- Filters -->
       <div class="mb-8 bg-white rounded-xl shadow-sm p-6">
-        <div class="flex gap-4 items-end">
+        <div class="flex flex-wrap gap-4 items-end">
           <!-- Type Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Loại tài liệu</label>
             <select 
               v-model="selectedType"
               class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
             >
-              <option value="">Tất cả</option>
+              <option value="">Tất cả loại tài liệu</option>
               <option v-for="type in types" :key="type.value" :value="type.value">
                 {{ type.label }}
               </option>
@@ -127,13 +127,13 @@ const getYouTubeEmbedUrl = (url: string) => {
           </div>
 
           <!-- Subject Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Môn học</label>
             <select 
               v-model="selectedSubject"
               class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
             >
-              <option value="">Tất cả</option>
+              <option value="">Tất cả môn học</option>
               <option v-for="subject in subjects" :key="subject.documentId" :value="subject.documentId">
                 {{ subject.name }}
               </option>
@@ -146,13 +146,13 @@ const getYouTubeEmbedUrl = (url: string) => {
           </div>
 
           <!-- Class Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Lớp</label>
             <select 
               v-model="selectedClass"
               class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
             >
-              <option value="">Tất cả</option>
+              <option value="">Tất cả lớp</option>
               <option v-for="cls in classes" :key="cls.documentId" :value="cls.documentId">
                 {{ cls.name }}
               </option>
@@ -165,13 +165,13 @@ const getYouTubeEmbedUrl = (url: string) => {
           </div>
 
           <!-- Level Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Mức độ</label>
             <select 
               v-model="selectedLevel"
               class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
             >
-              <option value="">Tất cả</option>
+              <option value="">Tất cả mức độ</option>
               <option v-for="level in levels" :key="level.documentId" :value="level.documentId">
                 {{ level.title }}
               </option>

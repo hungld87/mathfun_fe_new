@@ -89,12 +89,15 @@ watch([selectedClass, selectedSubject, selectedLevel], () => {
       
       <!-- Filters -->
       <div class="mb-8 bg-white rounded-xl shadow-sm p-6">
-        <div class="flex gap-4 items-end">
+        <div class="flex flex-wrap gap-4 items-end">
           <!-- Class Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Khoảng tuổi</label>
-            <select v-model="selectedClass" class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer">
-              <option value="">Tất cả</option>
+            <select 
+              v-model="selectedClass"
+              class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
+            >
+              <option value="">Tất cả khoảng tuổi</option>
               <option 
                 v-for="cls in filterClasses" 
                 :key="cls.id" 
@@ -113,10 +116,13 @@ watch([selectedClass, selectedSubject, selectedLevel], () => {
           </div>
 
           <!-- Subject Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Môn học</label>
-            <select v-model="selectedSubject" class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer">
-              <option value="">Tất cả</option>
+            <select 
+              v-model="selectedSubject"
+              class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
+            >
+              <option value="">Tất cả môn học</option>
               <option 
                 v-for="subject in filterSubjects" 
                 :key="subject.id" 
@@ -133,10 +139,13 @@ watch([selectedClass, selectedSubject, selectedLevel], () => {
           </div>
 
           <!-- Level Filter -->
-          <div class="relative flex-1">
+          <div class="relative flex-1 min-w-[200px]">
             <label class="block text-sm font-semibold text-gray-700 mb-2">Trình độ</label>
-            <select v-model="selectedLevel" class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer">
-              <option value="">Tất cả</option>
+            <select 
+              v-model="selectedLevel"
+              class="appearance-none w-full bg-white border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-gray-700 hover:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition cursor-pointer"
+            >
+              <option value="">Tất cả trình độ</option>
               <option 
                 v-for="level in filterLevels" 
                 :key="level.id" 
@@ -154,7 +163,10 @@ watch([selectedClass, selectedSubject, selectedLevel], () => {
 
           <!-- Reset Filter Button -->
           <div class="flex-shrink-0">
-            <button @click="resetFilters" class="px-4 py-2.5 text-sm text-gray-600 hover:text-teal-600 font-medium flex items-center gap-2 hover:bg-teal-50 rounded-lg transition whitespace-nowrap">
+            <button 
+              @click="resetFilters"
+              class="px-4 py-2.5 text-sm text-gray-600 hover:text-teal-600 font-medium flex items-center gap-2 hover:bg-teal-50 rounded-lg transition whitespace-nowrap"
+            >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>

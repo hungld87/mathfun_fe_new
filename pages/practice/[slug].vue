@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { marked } from 'marked'
 
 const route = useRoute()
 const slug = route.params.slug as string
@@ -7,6 +8,39 @@ const slug = route.params.slug as string
 definePageMeta({
   title: 'Làm bài thi · MathFun'
 })
+
+// Configure marked options
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+})
+
+// Helper function to convert YouTube links to embedded iframe
+const processYouTubeLinks = (html: string): string => {
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&].*)?/g
+  
+  return html.replace(youtubeRegex, (match, videoId) => {
+    return `<div class="video-container my-4">
+      <iframe 
+        width="100%" 
+        height="360" 
+        src="https://www.youtube.com/embed/${videoId}" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen
+        class="rounded-lg shadow-lg"
+      ></iframe>
+    </div>`
+  })
+}
+
+// Function to parse question markdown
+const parseQuestion = (question: string): string => {
+  if (!question) return ''
+  let html = marked.parse(question) as string
+  html = processYouTubeLinks(html)
+  return html
+}
 
 // Auth state
 const isAuthModalOpen = ref(false)
@@ -467,7 +501,7 @@ const handleAuthSuccess = async () => {
               {{ index + 1 }}
             </div>
             <div class="flex-1">
-              <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ qa.question }}</h3>
+              <div class="markdown-content question-content" v-html="parseQuestion(qa.question)"></div>
               
               <!-- Question Image -->
               <img 
@@ -981,5 +1015,131 @@ const handleAuthSuccess = async () => {
 
 .overflow-y-auto::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* Markdown Content Styling for Questions */
+.question-content :deep(p) {
+  @apply text-lg font-semibold text-gray-900 mb-3;
+}
+
+.markdown-content {
+  @apply text-gray-800 leading-relaxed;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4) {
+  @apply font-bold text-gray-900 mt-4 mb-2;
+}
+
+.markdown-content :deep(h1) {
+  @apply text-2xl;
+}
+
+.markdown-content :deep(h2) {
+  @apply text-xl;
+}
+
+.markdown-content :deep(h3) {
+  @apply text-lg;
+}
+
+.markdown-content :deep(h4) {
+  @apply text-base;
+}
+
+.markdown-content :deep(p) {
+  @apply mb-3 text-base leading-7;
+}
+
+.markdown-content :deep(strong) {
+  @apply font-bold text-gray-900;
+}
+
+.markdown-content :deep(em) {
+  @apply italic;
+}
+
+.markdown-content :deep(a) {
+  @apply text-primary hover:text-teal-600 underline font-medium transition-colors;
+}
+
+.markdown-content :deep(ul) {
+  @apply list-disc list-inside mb-3 space-y-1 ml-4;
+}
+
+.markdown-content :deep(ol) {
+  @apply list-decimal list-inside mb-3 space-y-1 ml-4;
+}
+
+.markdown-content :deep(li) {
+  @apply text-base leading-6;
+}
+
+.markdown-content :deep(li > ul),
+.markdown-content :deep(li > ol) {
+  @apply mt-1 ml-6;
+}
+
+.markdown-content :deep(blockquote) {
+  @apply border-l-4 border-primary bg-teal-50 pl-4 pr-4 py-2 mb-3 italic text-gray-700;
+}
+
+.markdown-content :deep(code) {
+  @apply bg-gray-100 text-pink-600 px-2 py-1 rounded text-sm font-mono;
+}
+
+.markdown-content :deep(pre) {
+  @apply bg-gray-900 text-gray-100 p-3 rounded-lg overflow-x-auto mb-3;
+}
+
+.markdown-content :deep(pre code) {
+  @apply bg-transparent text-gray-100 p-0;
+}
+
+.markdown-content :deep(img) {
+  @apply max-w-full h-auto rounded-lg shadow-md my-4 mx-auto;
+}
+
+.markdown-content :deep(table) {
+  @apply w-full border-collapse mb-3 shadow-sm rounded-lg overflow-hidden;
+}
+
+.markdown-content :deep(thead) {
+  @apply bg-primary text-white;
+}
+
+.markdown-content :deep(th) {
+  @apply p-2 text-left font-semibold text-sm;
+}
+
+.markdown-content :deep(td) {
+  @apply p-2 border-b border-gray-200 text-sm;
+}
+
+.markdown-content :deep(tbody tr:hover) {
+  @apply bg-gray-50;
+}
+
+.markdown-content :deep(hr) {
+  @apply my-4 border-t-2 border-gray-200;
+}
+
+.markdown-content :deep(iframe) {
+  @apply w-full rounded-lg shadow-md my-4;
+}
+
+.markdown-content :deep(.video-container) {
+  @apply relative w-full my-4;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+
+.markdown-content :deep(.video-container iframe) {
+  @apply absolute top-0 left-0 w-full h-full rounded-lg shadow-lg;
 }
 </style>

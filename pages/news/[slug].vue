@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { marked } from 'marked'
 import type { NewsItem } from '~/types'
 
 const route = useRoute()
@@ -12,6 +13,48 @@ definePageMeta({
 const { get } = useApi()
 const { data: newsList } = await useAsyncData('news-list', () => get('/news'))
 const article = computed(() => newsList.value?.find(n => n.slug === slug))
+
+// Configure marked options
+marked.setOptions({
+  breaks: true,
+  gfm: true,
+})
+
+// Helper function to convert YouTube links to embedded iframe
+const processYouTubeLinks = (html: string): string => {
+  // Pattern for YouTube links
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&].*)?/g
+  
+  return html.replace(youtubeRegex, (match, videoId) => {
+    return `<div class="video-container my-6">
+      <iframe 
+        width="100%" 
+        height="480" 
+        src="https://www.youtube.com/embed/${videoId}" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen
+        class="rounded-lg shadow-lg"
+      ></iframe>
+    </div>`
+  })
+}
+
+// Parse markdown content to HTML
+const parsedContent = computed(() => {
+  if (!article.value?.content) return ''
+  let html = marked.parse(article.value.content) as string
+  html = processYouTubeLinks(html)
+  return html
+})
+
+// Parse markdown description to HTML
+const parsedDescription = computed(() => {
+  if (!article.value?.description) return ''
+  let html = marked.parse(article.value.description) as string
+  html = processYouTubeLinks(html)
+  return html
+})
 
 // Get related news (same tags, exclude current)
 const relatedNews = computed(() => {
@@ -84,14 +127,12 @@ const relatedNews = computed(() => {
 
           <!-- Description -->
           <div class="bg-teal-50 border-l-4 border-primary p-4 rounded-r-lg mb-8">
-            <p class="text-text font-medium italic">{{ article.description }}</p>
+            <div class="markdown-content text-text font-medium" v-html="parsedDescription"></div>
           </div>
           
           <!-- Main Content -->
-          <div class="prose prose-lg max-w-none mb-8">
-            <div class="text-text leading-relaxed space-y-4">
-              <p>{{ article.content }}</p>
-            </div>
+          <div class="markdown-content prose prose-lg max-w-none mb-8">
+            <div v-html="parsedContent"></div>
           </div>
 
           <!-- Tags -->
@@ -187,3 +228,142 @@ const relatedNews = computed(() => {
     </div>
   </main>
 </template>
+
+<style scoped>
+/* Markdown Content Styling */
+.markdown-content {
+  @apply text-gray-800 leading-relaxed;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+/* First paragraph - lead style */
+.markdown-content :deep(p:first-of-type) {
+  @apply text-lg text-gray-700 font-medium;
+}
+
+/* Headings */
+.markdown-content :deep(h1) {
+  @apply text-3xl font-bold text-gray-900 mt-8 mb-4;
+}
+
+.markdown-content :deep(h2) {
+  @apply text-2xl font-bold text-gray-900 mt-6 mb-3;
+}
+
+.markdown-content :deep(h3) {
+  @apply text-xl font-semibold text-gray-900 mt-5 mb-2;
+}
+
+.markdown-content :deep(h4) {
+  @apply text-lg font-semibold text-gray-800 mt-4 mb-2;
+}
+
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
+  @apply text-base font-semibold text-gray-800 mt-3 mb-2;
+}
+
+/* Paragraphs */
+.markdown-content :deep(p) {
+  @apply mb-4 text-base leading-7;
+}
+
+/* Bold & Italic */
+.markdown-content :deep(strong) {
+  @apply font-bold text-gray-900;
+}
+
+.markdown-content :deep(em) {
+  @apply italic;
+}
+
+/* Links */
+.markdown-content :deep(a) {
+  @apply text-primary hover:text-teal-600 underline font-medium transition-colors;
+}
+
+/* Lists */
+.markdown-content :deep(ul) {
+  @apply list-disc list-inside mb-4 space-y-2 ml-4;
+}
+
+.markdown-content :deep(ol) {
+  @apply list-decimal list-inside mb-4 space-y-2 ml-4;
+}
+
+.markdown-content :deep(li) {
+  @apply text-base leading-7;
+}
+
+.markdown-content :deep(li > ul),
+.markdown-content :deep(li > ol) {
+  @apply mt-2 ml-6;
+}
+
+/* Blockquotes */
+.markdown-content :deep(blockquote) {
+  @apply border-l-4 border-primary bg-teal-50 pl-4 pr-4 py-3 mb-4 italic text-gray-700;
+}
+
+/* Code */
+.markdown-content :deep(code) {
+  @apply bg-gray-100 text-pink-600 px-2 py-1 rounded text-sm font-mono;
+}
+
+.markdown-content :deep(pre) {
+  @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.markdown-content :deep(pre code) {
+  @apply bg-transparent text-gray-100 p-0;
+}
+
+/* Images */
+.markdown-content :deep(img) {
+  @apply max-w-full h-auto rounded-lg shadow-md my-6 mx-auto;
+}
+
+/* Tables */
+.markdown-content :deep(table) {
+  @apply w-full border-collapse mb-4 shadow-sm rounded-lg overflow-hidden;
+}
+
+.markdown-content :deep(thead) {
+  @apply bg-primary text-white;
+}
+
+.markdown-content :deep(th) {
+  @apply p-3 text-left font-semibold;
+}
+
+.markdown-content :deep(td) {
+  @apply p-3 border-b border-gray-200;
+}
+
+.markdown-content :deep(tbody tr:hover) {
+  @apply bg-gray-50;
+}
+
+/* Horizontal Rule */
+.markdown-content :deep(hr) {
+  @apply my-8 border-t-2 border-gray-200;
+}
+
+/* Iframe (for YouTube videos) */
+.markdown-content :deep(iframe) {
+  @apply w-full aspect-video rounded-lg shadow-md my-6;
+}
+
+/* Video Container */
+.markdown-content :deep(.video-container) {
+  @apply relative w-full my-6;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.markdown-content :deep(.video-container iframe) {
+  @apply absolute top-0 left-0 w-full h-full rounded-lg shadow-lg;
+}
+</style>
