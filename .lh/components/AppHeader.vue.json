@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1765278856429,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1765338987826,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -197,10 +197,27 @@\n         </nav>\n \n         <!-- Mobile Menu Footer -->\n         <div class=\"p-4 border-t border-gray-200 space-y-2\">\n+          <!-- If user is logged in, show user info + logout -->\n+          <div v-if=\"currentUser\" class=\"bg-gray-50 rounded-lg p-4\">\n+            <div class=\"flex items-center gap-3\">\n+              <div class=\"w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold\">\n+                {{ (currentUser.username || 'U').charAt(0).toUpperCase() }}\n+              </div>\n+              <div class=\"flex-1\">\n+                <p class=\"text-sm font-semibold text-gray-900 truncate\">{{ currentUser.username }}</p>\n+                <p class=\"text-xs text-gray-500 truncate\">{{ currentUser.email }}</p>\n+              </div>\n+            </div>\n+            <div class=\"mt-3 flex gap-2\">\n+              <button @click=\"() => { closeMenu(); navigateTo('/profile') }\" class=\"flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-100\">Tài khoản</button>\n+              <button @click=\"handleLogout\" class=\"flex-1 px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100\">Đăng xuất</button>\n+            </div>\n+          </div>\n+          <!-- Otherwise show login button -->\n           <button \n-            v-if=\"buttons.login.enabled\"\n+            v-else-if=\"buttons.login.enabled\"\n             @click=\"openAuthModal\"\n             class=\"w-full flex items-center justify-center gap-2 px-4 py-3 text-teal-600 border-2 border-teal-600 rounded-lg hover:bg-teal-50 transition font-medium\"\n           >\n             <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n@@ -314,9 +331,9 @@\n   closeMenu() // Close mobile menu if open\n }\n \n const handleAuthSuccess = (data) => {\n-  console.log('Auth success:', data)\n+  // console.log('Auth success:', data)\n   // Update current user from auth response\n   if (data.user) {\n     currentUser.value = data.user\n   }\n"
                 }
             ],
             "date": 1765278856429,

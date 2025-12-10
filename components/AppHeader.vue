@@ -198,8 +198,25 @@
 
         <!-- Mobile Menu Footer -->
         <div class="p-4 border-t border-gray-200 space-y-2">
+          <!-- If user is logged in, show user info + logout -->
+          <div v-if="currentUser" class="bg-gray-50 rounded-lg p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
+                {{ (currentUser.username || 'U').charAt(0).toUpperCase() }}
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-semibold text-gray-900 truncate">{{ currentUser.username }}</p>
+                <p class="text-xs text-gray-500 truncate">{{ currentUser.email }}</p>
+              </div>
+            </div>
+            <div class="mt-3 flex gap-2">
+              <button @click="() => { closeMenu(); navigateTo('/profile') }" class="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-100">Tài khoản</button>
+              <button @click="handleLogout" class="flex-1 px-4 py-2 bg-red-50 text-red-600 rounded-lg text-sm font-medium hover:bg-red-100">Đăng xuất</button>
+            </div>
+          </div>
+          <!-- Otherwise show login button -->
           <button 
-            v-if="buttons.login.enabled"
+            v-else-if="buttons.login.enabled"
             @click="openAuthModal"
             class="w-full flex items-center justify-center gap-2 px-4 py-3 text-teal-600 border-2 border-teal-600 rounded-lg hover:bg-teal-50 transition font-medium"
           >

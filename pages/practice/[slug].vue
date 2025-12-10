@@ -354,18 +354,78 @@ const confirmSubmit = async () => {
     clearInterval(timerInterval.value)
   }
 
-  // Clear localStorage
-  clearStorage()
+  // Calculate time spent (in seconds)
+  const totalDuration = (practice.value?.duration_time || 0) * 60
+  const timeSpent = totalDuration - timeLeft.value
 
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1000))
+  // Prepare answers payload
+  const answers = practice.value?.question_answer?.map((qa: any, index: number) => {
+    const questionId = index + 1
+    const userAnswer = userAnswers.value[questionId]
+    
+    // Handle multiple choice (checkbox) - convert comma-separated string to array
+    let answerValue: string | string[] = userAnswer || ''
+    if (userAnswer && userAnswer.includes(',')) {
+      answerValue = userAnswer.split(',').filter(a => a.trim())
+    }
+    
+    return {
+      questionDocumentId: qa.documentId || `q${questionId}`,
+      answer: answerValue
+    }
+  }).filter((item: any) => item.answer && (Array.isArray(item.answer) ? item.answer.length > 0 : item.answer !== ''))
 
-  isSubmitting.value = false
-  showResult.value = true
-  canLeave.value = true
-  
-  // Show success modal
-  showSuccessModal.value = true
+  // Prepare submission payload
+  const payload = {
+    practiceDocumentId: documentId.value,
+    timeSpent: timeSpent,
+    answers: answers
+  }
+
+  try {
+    // Call submit API
+    const headers: any = {
+      'Content-Type': 'application/json'
+    }
+    
+    // Add JWT token if available
+    if (process.client) {
+      const token = localStorage.getItem('jwt')
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+    }
+
+    const response = await $fetch('/api/practice-scorings/submit', {
+      method: 'POST',
+      headers: headers,
+      body: payload
+    })
+
+    console.log('Submit response:', response)
+
+    // Clear localStorage after successful submit
+    clearStorage()
+
+    isSubmitting.value = false
+    showResult.value = true
+    canLeave.value = true
+    
+    // Show success modal
+    showSuccessModal.value = true
+  } catch (error) {
+    console.error('Error submitting practice:', error)
+    isSubmitting.value = false
+    
+    // Still clear storage and show result even if API fails
+    clearStorage()
+    showResult.value = true
+    canLeave.value = true
+    showSuccessModal.value = true
+    
+    // Optionally show error message to user
+    alert('Có lỗi khi gửi bài thi. Vui lòng thử lại sau.')
+  }
 }
 
 const cancelSubmit = () => {
