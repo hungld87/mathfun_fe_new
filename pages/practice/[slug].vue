@@ -374,29 +374,41 @@ const confirmSubmit = async () => {
   const totalDuration = (practice.value?.duration_time || 0) * 60
   const timeSpent = totalDuration - timeLeft.value
 
-  // Prepare answers payload
-  const answers = practice.value?.question_answer?.map((qa: any, index: number) => {
+  // Prepare scores payload with question documentId, solution, and score
+  const scores = practice.value?.question_answer?.map((qa: any, index: number) => {
     const questionId = index + 1
     const userAnswer = userAnswers.value[questionId]
     
-    // Handle multiple choice (checkbox) - convert comma-separated string to array
-    let answerValue: string | string[] = userAnswer || ''
-    if (userAnswer && userAnswer.includes(',')) {
-      answerValue = userAnswer.split(',').filter(a => a.trim())
+    // Skip if no answer
+    if (!userAnswer) return null
+    
+    // Handle multiple choice (checkbox) - convert comma-separated string to single string
+    let solutionValue = userAnswer
+    if (userAnswer.includes(',')) {
+      solutionValue = userAnswer.split(',').filter((a: string) => a.trim()).join(', ')
     }
     
+    // Calculate score (you can adjust this logic based on your needs)
+    // For now, we'll set score to 0 (backend should calculate actual score)
+    const score = 0
+    
     return {
-      questionDocumentId: qa.documentId || `q${questionId}`,
-      answer: answerValue
+      question: qa.documentId || `q${questionId}`,
+      solution: solutionValue,
+      score: score
     }
-  }).filter((item: any) => item.answer && (Array.isArray(item.answer) ? item.answer.length > 0 : item.answer !== ''))
+  }).filter((item: any) => item !== null)
 
-  // Prepare submission payload
+  // Prepare submission payload according to new API format
   const payload = {
     practiceDocumentId: documentId.value,
-    timeSpent: timeSpent,
-    answers: answers
+    durationtime: timeSpent,
+    scores: scores
   }
+
+  console.log('=== SUBMITTING PRACTICE ===')
+  console.log('Payload:', JSON.stringify(payload, null, 2))
+  console.log('Number of scores:', scores.length)
 
   try {
     // Call submit API
@@ -409,9 +421,13 @@ const confirmSubmit = async () => {
       const token = localStorage.getItem('jwt')
       if (token) {
         headers['Authorization'] = `Bearer ${token}`
+        console.log('JWT token found:', token?.substring(0, 20) + '...')
+      } else {
+        console.log('No JWT token found')
       }
     }
 
+    console.log('Calling API: /api/practice-scorings/submit')
     const response = await $fetch('/api/practice-scorings/submit', {
       method: 'POST',
       headers: headers,
