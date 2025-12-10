@@ -2,20 +2,20 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
   const body = await readBody(event)
   
-  console.log('=== PRACTICE SCORING SUBMIT API CALLED ===')
-  console.log('Body:', JSON.stringify(body, null, 2))
-  console.log('API Base:', config.public.apiBase)
-  console.log('Use Mock:', config.public.useMock)
+//   console.log('=== PRACTICE SCORING SUBMIT API CALLED ===')
+//   console.log('Body:', JSON.stringify(body, null, 2))
+//   console.log('API Base:', config.public.apiBase)
+//   console.log('Use Mock:', config.public.useMock)
   
   // Get JWT token from headers
   const authHeader = getHeader(event, 'authorization')
   const token = authHeader?.replace('Bearer ', '')
   
-  if (token) {
-    console.log('Token found:', token.substring(0, 20) + '...')
-  } else {
-    console.log('No token in request')
-  }
+//   if (token) {
+//     console.log('Token found:', token.substring(0, 20) + '...')
+//   } else {
+//     console.log('No token in request')
+//   }
   
   // If using mock mode
   if (config.public.useMock) {
@@ -37,7 +37,7 @@ export default defineEventHandler(async (event) => {
   }
   
   // If using real API, forward to Strapi
-  console.log('Forwarding to real Strapi API...')
+//   console.log('Forwarding to real Strapi API...')
   
   try {
     const headers: any = {
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
     }
     
     const apiUrl = `${config.public.apiBase}/practice-scorings/submit`
-    console.log('Calling Strapi:', apiUrl)
+    // console.log('Calling Strapi:', apiUrl)
     
     const response = await $fetch(apiUrl, {
       method: 'POST',
@@ -57,7 +57,7 @@ export default defineEventHandler(async (event) => {
       body
     })
     
-    console.log('Strapi response:', response)
+    // console.log('Strapi response:', response)
     return response
   } catch (error: any) {
     console.error('=== ERROR SUBMITTING TO STRAPI ===')

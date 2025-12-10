@@ -374,18 +374,32 @@ const confirmSubmit = async () => {
   const totalDuration = (practice.value?.duration_time || 0) * 60
   const timeSpent = totalDuration - timeLeft.value
 
+  // console.log('=== PREPARING SCORES ===')
+  // console.log('userAnswers:', userAnswers.value)
+  // console.log('Total questions:', practice.value?.question_answer?.length)
+
   // Prepare scores payload with question documentId, solution, and score
   const scores = practice.value?.question_answer?.map((qa: any, index: number) => {
-    const questionId = index + 1
-    const userAnswer = userAnswers.value[questionId]
+    // IMPORTANT: Use qa.id as key (consistent with input/radio/checkbox v-model)
+    const userAnswer = userAnswers.value[qa.id]
+    
+    // console.log(`Question ${index + 1} (id: ${qa.id}):`, { 
+    //   answerType: qa.answer_type,
+    //   documentId: qa.documentId,
+    //   qaId: qa.id,
+    //   userAnswer: userAnswer,
+    //   hasAnswer: !!userAnswer 
+    // })
     
     // Skip if no answer
-    if (!userAnswer) return null
+    if (!userAnswer || userAnswer.toString().trim() === '') return null
     
-    // Handle multiple choice (checkbox) - convert comma-separated string to single string
-    let solutionValue = userAnswer
-    if (userAnswer.includes(',')) {
-      solutionValue = userAnswer.split(',').filter((a: string) => a.trim()).join(', ')
+    // Process solution based on answer type
+    let solutionValue = userAnswer.toString().trim()
+    
+    // For checkbox: convert comma-separated string to formatted string
+    if (qa.answer_type === 'checkbox' && solutionValue.includes(',')) {
+      solutionValue = solutionValue.split(',').filter((a: string) => a.trim()).join(', ')
     }
     
     // Calculate score (you can adjust this logic based on your needs)
@@ -393,7 +407,7 @@ const confirmSubmit = async () => {
     const score = 0
     
     return {
-      question: qa.documentId || `q${questionId}`,
+      question: qa.documentId || `q${qa.id}`,
       solution: solutionValue,
       score: score
     }
@@ -406,9 +420,9 @@ const confirmSubmit = async () => {
     scores: scores
   }
 
-  console.log('=== SUBMITTING PRACTICE ===')
-  console.log('Payload:', JSON.stringify(payload, null, 2))
-  console.log('Number of scores:', scores.length)
+  // console.log('=== SUBMITTING PRACTICE ===')
+  // console.log('Payload:', JSON.stringify(payload, null, 2))
+  // console.log('Number of scores:', scores.length)
 
   try {
     // Call submit API
@@ -421,13 +435,13 @@ const confirmSubmit = async () => {
       const token = localStorage.getItem('jwt')
       if (token) {
         headers['Authorization'] = `Bearer ${token}`
-        console.log('JWT token found:', token?.substring(0, 20) + '...')
+        // console.log('JWT token found:', token?.substring(0, 20) + '...')
       } else {
         console.log('No JWT token found')
       }
     }
 
-    console.log('Calling API: /api/practice-scorings/submit')
+    // console.log('Calling API: /api/practice-scorings/submit')
     const response = await $fetch('/api/practice-scorings/submit', {
       method: 'POST',
       headers: headers,
