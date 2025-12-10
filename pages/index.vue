@@ -39,17 +39,23 @@ const homeData = computed(() => homeResponse.value?.data)
     </section>
 
     <!-- Leaderboard + News Section -->
-    <section class="container mx-auto px-6 py-10 max-w-content grid md:grid-cols-2 gap-8">
-      <Leaderboard 
-        :items="homeData?.weeklyRanking?.items" 
-        :title="homeData?.weeklyRanking?.title"
-        :icon="homeData?.weeklyRanking?.icon"
-      />
-      <NewsList 
-        :items="homeData?.newsHot?.items" 
-        :title="homeData?.newsHot?.title"
-        :icon="homeData?.newsHot?.icon"
-      />
+    <section class="container mx-auto px-6 py-10 max-w-content overflow-hidden">
+      <div class="grid md:grid-cols-2 gap-8 min-w-0">
+        <div v-if="homeData?.weeklyRanking?.items && homeData.weeklyRanking.items.length > 0" class="min-w-0">
+          <Leaderboard 
+            :items="homeData?.weeklyRanking?.items" 
+            :title="homeData?.weeklyRanking?.title"
+            :icon="homeData?.weeklyRanking?.icon"
+          />
+        </div>
+        <div class="min-w-0" :class="{ 'md:col-span-2': !homeData?.weeklyRanking?.items || homeData.weeklyRanking.items.length === 0 }">
+          <NewsList 
+            :items="homeData?.newsHot?.items" 
+            :title="homeData?.newsHot?.title"
+            :icon="homeData?.newsHot?.icon"
+          />
+        </div>
+      </div>
     </section>
   </main>
 </template>

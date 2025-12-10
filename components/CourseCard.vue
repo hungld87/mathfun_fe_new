@@ -28,7 +28,7 @@
       <div class="flex gap-2">
         <button 
           @click="openConsultationModal"
-          class="flex-1 rounded-lg bg-orange-500 text-white px-3 py-2 text-center text-sm font-semibold hover:bg-orange-600 hover:shadow-md transition-all flex items-center justify-center gap-1"
+          class="flex-1 rounded-full bg-gradient-to-r from-orange-400 to-orange-500 text-white px-3 py-2 text-center text-sm font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center justify-center gap-1"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -37,7 +37,7 @@
         </button>
         <button 
           @click="openCourse"
-          class="flex-1 rounded-lg bg-primary text-white px-3 py-2 text-center text-sm font-semibold hover:bg-teal-600 hover:shadow-md transition-all"
+          class="flex-1 rounded-full bg-primary text-white px-3 py-2 text-center text-sm font-semibold hover:bg-teal-600 hover:shadow-lg hover:scale-105 transition-all"
         >
           Xem khoá
         </button>

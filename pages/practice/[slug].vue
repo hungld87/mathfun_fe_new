@@ -46,11 +46,21 @@ const parseQuestion = (question: string): string => {
 const isAuthModalOpen = ref(false)
 const isAuthenticated = ref(false)
 const jwtToken = ref<string | null>(null)
+const currentUser = ref<any>(null)
 
-// Check authentication
+// Check authentication and load current user
 if (process.client) {
   jwtToken.value = localStorage.getItem('jwt')
   isAuthenticated.value = !!jwtToken.value
+  
+  const userStr = localStorage.getItem('user')
+  if (userStr) {
+    try {
+      currentUser.value = JSON.parse(userStr)
+    } catch (e) {
+      console.error('Failed to parse user data:', e)
+    }
+  }
 }
 
 // Fetch practice detail using slug
@@ -94,10 +104,16 @@ watch(practiceError, (error) => {
 
 const documentId = computed(() => practice.value?.documentId || slug)
 
-// LocalStorage keys using documentId for uniqueness
-const STORAGE_KEY_TIME = computed(() => `practice_time_${documentId.value}`)
-const STORAGE_KEY_ANSWERS = computed(() => `practice_answers_${documentId.value}`)
-const STORAGE_KEY_START_TIME = computed(() => `practice_start_${documentId.value}`)
+// Get user email for unique storage key
+const userEmail = computed(() => {
+  if (!currentUser.value) return 'guest'
+  return currentUser.value.email || currentUser.value.id || 'guest'
+})
+
+// LocalStorage keys using documentId AND userEmail for uniqueness per user
+const STORAGE_KEY_TIME = computed(() => `practice_time_${userEmail.value}_${documentId.value}`)
+const STORAGE_KEY_ANSWERS = computed(() => `practice_answers_${userEmail.value}_${documentId.value}`)
+const STORAGE_KEY_START_TIME = computed(() => `practice_start_${userEmail.value}_${documentId.value}`)
 
 // User answers state
 const userAnswers = ref<Record<number, string>>({})
@@ -477,10 +493,20 @@ const handleAuthClose = () => {
 const handleAuthSuccess = async () => {
   isAuthModalOpen.value = false
   
-  // Update auth state
+  // Update auth state and user info
   if (process.client) {
     jwtToken.value = localStorage.getItem('jwt')
     isAuthenticated.value = !!jwtToken.value
+    
+    // Load user info
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+      try {
+        currentUser.value = JSON.parse(userStr)
+      } catch (e) {
+        console.error('Failed to parse user data:', e)
+      }
+    }
   }
   
   // Reload page to refresh header and data with new token

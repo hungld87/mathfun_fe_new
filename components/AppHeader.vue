@@ -27,7 +27,8 @@
               <span class="font-bold text-white text-lg">{{ (logo.text || 'M').charAt(0) }}</span>
             </div>
           </div>
-          <div class="text-white">
+          <!-- Hide logo text on mobile, show on md and up -->
+          <div class="text-white hidden md:block">
             <div v-if="logo.sub_text" class="text-xs font-medium opacity-90">{{ logo.sub_text }}</div>
             <div class="text-lg font-bold" :class="{ '-mt-1': logo.sub_text }">{{ logo.text || 'MATHFUN' }}</div>
           </div>

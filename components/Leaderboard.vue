@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-card rounded-lg shadow p-6">
-    <div class="flex items-center gap-2 mb-4">
+  <div class="bg-card rounded-lg shadow p-6 min-w-0 overflow-hidden">
+    <div class="flex items-center gap-2 mb-4 min-w-0">
       <img v-if="icon" :src="icon" alt="icon" class="w-8 h-8 object-contain" />
       <h3 class="text-xl font-bold text-primary">
         {{ title || 'Bảng Xếp Hạng Tuần Này' }}

@@ -72,11 +72,23 @@ watch([selectedClass, selectedSubject, selectedLevel], () => {
 
 // Handle start practice - clear old data
 const startPractice = (slug: string, documentId: string) => {
-  // Clear all localStorage for this practice
+  // Get current user email to construct proper storage keys
+  let userEmail = 'guest'
   if (process.client) {
-    localStorage.removeItem(`practice_time_${documentId}`)
-    localStorage.removeItem(`practice_answers_${documentId}`)
-    localStorage.removeItem(`practice_start_${documentId}`)
+    const userStr = localStorage.getItem('user')
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr)
+        userEmail = user.email || user.id || 'guest'
+      } catch (e) {
+        console.error('Failed to parse user data:', e)
+      }
+    }
+    
+    // Clear all localStorage for this practice with user email
+    localStorage.removeItem(`practice_time_${userEmail}_${documentId}`)
+    localStorage.removeItem(`practice_answers_${userEmail}_${documentId}`)
+    localStorage.removeItem(`practice_start_${userEmail}_${documentId}`)
   }
   
   // Navigate to practice page using slug (pretty URL)

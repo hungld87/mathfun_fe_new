@@ -33,9 +33,12 @@
             </p>
             <NuxtLink 
               :to="items[currentIndex].link_internal"
-              class="inline-block bg-primary text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-teal-600 transition-all hover:scale-105 hover:shadow-xl shadow-lg animate-fade-in-delay-2"
+              class="inline-flex items-center gap-2 text-white text-lg font-bold hover:text-primary transition-all animate-fade-in-delay-2 group"
             >
-              Khám phá ngay →
+              <span class="border-b-2 border-white group-hover:border-primary transition-all">Khám phá ngay</span>
+              <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
             </NuxtLink>
           </div>
         </div>
