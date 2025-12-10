@@ -249,7 +249,7 @@
     <!-- Auth Modal -->
     <AuthModal 
       :is-open="isAuthModalOpen"
-      @close="isAuthModalOpen = false"
+      @close="closeAuthModal"
       @success="handleAuthSuccess"
     />
   </header>
@@ -277,6 +277,15 @@ onMounted(() => {
       }
     }
   }
+})
+
+// Watch route changes to ensure menu is closed
+const route = useRoute()
+watch(() => route.path, () => {
+  closeMenu()
+  closeAuthModal()
+  isConsultationModalOpen.value = false
+  isUserMenuOpen.value = false
 })
 
 // Load global config
@@ -328,8 +337,15 @@ const handleConsultationSubmit = (data) => {
 }
 
 const openAuthModal = () => {
-  isAuthModalOpen.value = true
-  closeMenu() // Close mobile menu if open
+  closeMenu() // Close mobile menu first
+  // Use nextTick to ensure menu is closed before opening modal
+  nextTick(() => {
+    isAuthModalOpen.value = true
+  })
+}
+
+const closeAuthModal = () => {
+  isAuthModalOpen.value = false
 }
 
 const handleAuthSuccess = (data) => {
@@ -338,6 +354,7 @@ const handleAuthSuccess = (data) => {
   if (data.user) {
     currentUser.value = data.user
   }
+  closeAuthModal()
 }
 
 const handleLogout = () => {

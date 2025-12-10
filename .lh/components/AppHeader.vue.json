@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1765278856429,
@@ -16,6 +16,10 @@
                 {
                     "date": 1765349302596,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,9 +26,10 @@\n             <div class=\"w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded flex items-center justify-center\">\n               <span class=\"font-bold text-white text-lg\">{{ (logo.text || 'M').charAt(0) }}</span>\n             </div>\n           </div>\n-          <div class=\"text-white\">\n+          <!-- Hide logo text on mobile, show on md and up -->\n+          <div class=\"text-white hidden md:block\">\n             <div v-if=\"logo.sub_text\" class=\"text-xs font-medium opacity-90\">{{ logo.sub_text }}</div>\n             <div class=\"text-lg font-bold\" :class=\"{ '-mt-1': logo.sub_text }\">{{ logo.text || 'MATHFUN' }}</div>\n           </div>\n         </NuxtLink>\n"
+                },
+                {
+                    "date": 1765351851790,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -248,9 +248,9 @@\n \n     <!-- Auth Modal -->\n     <AuthModal \n       :is-open=\"isAuthModalOpen\"\n-      @close=\"isAuthModalOpen = false\"\n+      @close=\"closeAuthModal\"\n       @success=\"handleAuthSuccess\"\n     />\n   </header>\n </template>\n@@ -278,8 +278,17 @@\n     }\n   }\n })\n \n+// Watch route changes to ensure menu is closed\n+const route = useRoute()\n+watch(() => route.path, () => {\n+  closeMenu()\n+  closeAuthModal()\n+  isConsultationModalOpen.value = false\n+  isUserMenuOpen.value = false\n+})\n+\n // Load global config\n const { data: globalConfig } = await useAsyncData('global-config-header', () => $fetch('/api/mock/global'))\n \n // console.log('===== HEADER GLOBAL CONFIG =====')\n@@ -327,18 +336,26 @@\n   // Here you can send data to your API\n }\n \n const openAuthModal = () => {\n-  isAuthModalOpen.value = true\n-  closeMenu() // Close mobile menu if open\n+  closeMenu() // Close mobile menu first\n+  // Use nextTick to ensure menu is closed before opening modal\n+  nextTick(() => {\n+    isAuthModalOpen.value = true\n+  })\n }\n \n+const closeAuthModal = () => {\n+  isAuthModalOpen.value = false\n+}\n+\n const handleAuthSuccess = (data) => {\n   // console.log('Auth success:', data)\n   // Update current user from auth response\n   if (data.user) {\n     currentUser.value = data.user\n   }\n+  closeAuthModal()\n }\n \n const handleLogout = () => {\n   if (process.client) {\n"
                 }
             ],
             "date": 1765278856429,

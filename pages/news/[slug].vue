@@ -80,14 +80,41 @@ const shareOnFacebook = () => {
 const copyLink = async () => {
   if (process.client) {
     try {
-      await navigator.clipboard.writeText(window.location.href)
-      linkCopied.value = true
-      setTimeout(() => {
-        linkCopied.value = false
-      }, 2000)
+      // Try modern clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(window.location.href)
+        linkCopied.value = true
+        setTimeout(() => {
+          linkCopied.value = false
+        }, 2000)
+      } else {
+        // Fallback method for non-HTTPS or older browsers
+        const textArea = document.createElement('textarea')
+        textArea.value = window.location.href
+        textArea.style.position = 'fixed'
+        textArea.style.left = '-999999px'
+        textArea.style.top = '-999999px'
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+        
+        const successful = document.execCommand('copy')
+        document.body.removeChild(textArea)
+        
+        if (successful) {
+          linkCopied.value = true
+          setTimeout(() => {
+            linkCopied.value = false
+          }, 2000)
+        } else {
+          throw new Error('Copy command failed')
+        }
+      }
     } catch (err) {
       console.error('Failed to copy link:', err)
-      alert('Không thể sao chép link. Vui lòng thử lại.')
+      // Show a user-friendly prompt as last resort
+      const url = window.location.href
+      prompt('Không thể tự động sao chép. Vui lòng copy link bên dưới:', url)
     }
   }
 }
