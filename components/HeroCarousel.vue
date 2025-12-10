@@ -28,10 +28,11 @@
             <h1 class="text-white text-5xl md:text-6xl font-bold mb-4 leading-tight animate-fade-in">
               {{ items[currentIndex].title }}
             </h1>
-            <p class="text-white/90 text-xl md:text-2xl mb-8 leading-relaxed animate-fade-in-delay">
+            <!-- <p class="text-white/90 text-xl md:text-2xl mb-8 leading-relaxed animate-fade-in-delay">
               {{ items[currentIndex].description }}
-            </p>
+            </p> -->
             <NuxtLink 
+              v-if="items[currentIndex].link_internal"
               :to="items[currentIndex].link_internal"
               class="inline-flex items-center gap-2 text-white text-lg font-bold hover:text-primary transition-all animate-fade-in-delay-2 group"
             >
@@ -40,6 +41,18 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
               </svg>
             </NuxtLink>
+            <a 
+              v-else-if="items[currentIndex].link_external"
+              :href="items[currentIndex].link_external"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-white text-lg font-bold hover:text-primary transition-all animate-fade-in-delay-2 group"
+            >
+              <span class="border-b-2 border-white group-hover:border-primary transition-all">Khám phá ngay</span>
+              <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+            </a>
           </div>
         </div>
       </div>

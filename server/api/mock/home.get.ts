@@ -16,10 +16,11 @@ export default defineEventHandler(async () => {
         slides: data.hero_slides?.map((slide: any) => ({
           id: slide.id,
           title: slide.title,
-          subtitle: slide.subtitle,
+          description: slide.subtitle || slide.description,
           image: slide.background_image?.url ? `${baseUrl}${slide.background_image.url}` : null,
           imageAlt: slide.image_alt || slide.title,
-          link: slide.link_internal || '/'
+          link_internal: slide.link_internal || '/',
+          link_external: slide.link_external || null
         })) || []
       },
       teachers: {
