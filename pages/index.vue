@@ -16,12 +16,20 @@ const homeData = computed(() => homeResponse.value?.data)
 <template>
   <main class="bg-background">
     <!-- Hero Carousel -->
-    <div class="mb-12">
+    <div>
       <HeroCarousel :items="homeData?.hero?.slides" />
     </div>
 
+    <!-- Award Section - Bảng Vàng Thành Tích -->
+    <AwardSection 
+      v-if="homeData?.awards"
+      :title="homeData?.awards?.title"
+      :icon="homeData?.awards?.icon"
+      :awards="homeData?.awards?.items"
+    />
+
     <!-- Teachers Section -->
-    <section class="container mx-auto px-6 py-10 max-w-content">
+    <section class="container mx-auto px-6 py-6 md:py-8 max-w-content">
       <TeachersGrid 
         :teachers="homeData?.teachers?.items" 
         :title="homeData?.teachers?.title"
@@ -30,7 +38,7 @@ const homeData = computed(() => homeResponse.value?.data)
     </section>
 
     <!-- Featured Courses Section -->
-    <section v-if="homeData?.coursesHot" class="container mx-auto px-6 py-10 max-w-content">
+    <section v-if="homeData?.coursesHot" class="container mx-auto px-6 py-6 md:py-8 max-w-content">
       <FeaturedCourses 
         :courses="homeData?.coursesHot?.items" 
         :title="homeData?.coursesHot?.title"
@@ -39,7 +47,7 @@ const homeData = computed(() => homeResponse.value?.data)
     </section>
 
     <!-- Leaderboard + News Section -->
-    <section class="container mx-auto px-6 py-10 max-w-content overflow-hidden">
+    <section class="container mx-auto px-6 py-6 md:py-8 max-w-content overflow-hidden">
       <div class="grid md:grid-cols-2 gap-8 min-w-0">
         <div v-if="homeData?.weeklyRanking?.items && homeData.weeklyRanking.items.length > 0" class="min-w-0">
           <Leaderboard 

@@ -99,6 +99,18 @@ export default defineEventHandler(async () => {
             icon: course.subject.icon?.url ? `${baseUrl}${course.subject.icon.url}` : null
           } : null
         })) || []
+      },
+      awards: {
+        title: data.title_award || 'Bảng Vàng Thành Tích',
+        icon: data.award_icon?.url || null, // Already has full URL from Strapi
+        items: data.awards?.map((award: any) => ({
+          id: award.id,
+          documentId: award.documentId,
+          slug: award.slug,
+          title: award.title,
+          description: award.description,
+          content: award.content
+        })) || []
       }
     }
     

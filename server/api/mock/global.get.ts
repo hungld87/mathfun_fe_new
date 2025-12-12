@@ -1,18 +1,12 @@
-import axios from 'axios'
-
 export default defineEventHandler(async () => {
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
   const baseUrl = apiBase.replace('/api', '')
   
   try {
-    const response = await axios.get(`${apiBase}/global/full`)
+    const response = await $fetch(`${apiBase}/global/full`)
     
-    const data = response.data.data
-    
-    // console.log('===== GLOBAL API RESPONSE =====')
-    // console.log('Full response:', JSON.stringify(response.data, null, 2))
-    // console.log('data:', data)
+    const data = response.data
     
     // Transform Strapi data to frontend format
     const transformedData = {
@@ -27,13 +21,13 @@ export default defineEventHandler(async () => {
           placeholder: data.headerSearch?.placeholder || "Tìm kiếm khóa học, bài tập, tài liệu...",
           enabled: data.headerSearch?.enabled !== false
         },
-        navigation: (data.headerNavigation || data.footerNavigation)?.map((item: any) => ({
+        navigation: (data.headerNavigation || []).map((item: any) => ({
           id: item.id,
           label: item.title,
           link: item.slug.startsWith('/') ? item.slug : `/${item.slug}`,
           icon: item.icon,
           highlight: item.is_highlight || false
-        })) || [],
+        })),
         buttons: {
           login: data.headerButton?.[0] ? {
             text: data.headerButton[0].text || "Đăng nhập",
@@ -65,36 +59,36 @@ export default defineEventHandler(async () => {
         },
         navigation: {
           title: "Liên Kết",
-          items: data.footerNavigation?.map((item: any) => ({
+          items: (data.footerNavigation || []).map((item: any) => ({
             id: item.id,
             title: item.title,
             slug: item.slug
-          })) || []
+          }))
         },
         resources: {
           title: "Tài Nguyên",
-          items: data.footerResources?.map((item: any) => ({
+          items: (data.footerResources || []).map((item: any) => ({
             id: item.id,
             title: item.title,
             slug: item.slug
-          })) || []
+          }))
         },
         policies: {
           title: "Chính Sách",
-          items: data.footerPolicies?.map((item: any) => ({
+          items: (data.footerPolicies || []).map((item: any) => ({
             id: item.id,
             title: item.title,
             slug: item.slug
-          })) || []
+          }))
         },
         centers: {
           title: "Trung Tâm",
-          items: data.centers?.map((item: any) => ({
+          items: (data.centers || []).map((item: any) => ({
             id: item.id,
             name: item.name,
             location: item.location,
             address: item.address
-          })) || []
+          }))
         },
         newsletter: {
           title: data.footerNewsletter?.title || "Đăng Ký Nhận Tin",
@@ -105,22 +99,22 @@ export default defineEventHandler(async () => {
         },
         social: {
           title: "Kết Nối Với Chúng Tôi",
-          links: data.footerSocaial?.map((item: any) => ({
+          links: (data.footerSocaial || []).map((item: any) => ({
             id: item.id,
             name: item.name,
             url: item.url,
             icon: item.icon?.url ? `${baseUrl}${item.icon.url}` : null
-          })) || []
+          }))
         },
         copyright: {
           text: data.footerCopyright?.text || "© 2024 MathFun. All rights reserved.",
           company: data.footerCopyright?.company || ""
         },
-        certifications: data.footerCertifications?.map((item: any) => ({
+        certifications: (data.footerCertifications || []).map((item: any) => ({
           id: item.id,
           name: item.name,
           image: item.image?.url ? `${baseUrl}${item.image.url}` : null
-        })) || []
+        }))
       },
       seo: {
         default_title: data.seo?.default_title || "MathFun - Học Toán Thông Minh",
@@ -152,12 +146,14 @@ export default defineEventHandler(async () => {
       status: 'ok',
       data: transformedData
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching global data:', error)
+    
+    // Fallback to mock data if API fails
+    const mockData = await import('../../mocks/global.json')
     return {
-      status: 'error',
-      data: null,
-      message: 'Failed to fetch global data from API'
+      status: 'ok',
+      data: mockData.default
     }
   }
 })
