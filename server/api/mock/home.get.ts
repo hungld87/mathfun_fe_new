@@ -111,7 +111,12 @@ export default defineEventHandler(async () => {
           description: award.description,
           content: award.content
         })) || []
-      }
+      },
+      mathfunHighlight: data.mathfun_highlight?.map((highlight: any) => ({
+        id: highlight.id,
+        title: highlight.title,
+        description: highlight.description
+      })) || []
     }
     
     return {

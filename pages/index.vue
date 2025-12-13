@@ -46,6 +46,12 @@ const homeData = computed(() => homeResponse.value?.data)
       />
     </section>
 
+    <!-- Why MathFun Section -->
+    <WhyMathFun 
+      v-if="homeData?.mathfunHighlight"
+      :highlights="homeData?.mathfunHighlight"
+    />
+
     <!-- Leaderboard + News Section -->
     <section class="container mx-auto px-6 py-6 md:py-8 max-w-content overflow-hidden">
       <div class="grid md:grid-cols-2 gap-8 min-w-0">
