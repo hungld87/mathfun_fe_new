@@ -61,6 +61,11 @@ if (process.client) {
       console.error('Failed to parse user data:', e)
     }
   }
+  
+  // IMPORTANT: Force login if not authenticated
+  if (!jwtToken.value) {
+    isAuthModalOpen.value = true
+  }
 }
 
 // Fetch practice detail using slug
@@ -88,6 +93,64 @@ const { data: practiceResponse, error: practiceError, refresh: refreshPractice }
 )
 
 const practice = computed(() => practiceResponse.value?.data)
+
+// Check if user has already submitted this practice
+const hasSubmittedBefore = ref(false)
+const previousSubmission = ref<any>(null)
+
+// Fetch user's submission history for this practice
+const checkPreviousSubmission = async () => {
+  if (!isAuthenticated.value || !documentId.value) return
+  
+  try {
+    const headers: any = {}
+    if (process.client) {
+      const token = localStorage.getItem('jwt')
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+    }
+    
+    // Call Strapi API directly
+    const apiBase = 'http://127.0.0.1:1337/api'
+    const response = await $fetch(`${apiBase}/practice-scorings/my-history`, {
+      headers,
+      params: {
+        practiceDocumentId: documentId.value
+      }
+    })
+    
+    // If user has submissions for this practice, get the first one
+    if (response.data && response.data.length > 0) {
+      hasSubmittedBefore.value = true
+      previousSubmission.value = response.data[0]
+      
+      // Build gradingResult from the submission history
+      const submission = previousSubmission.value
+      gradingResult.value = {
+        summary: {
+          totalScore: submission.totalScore,
+          maxScore: submission.maxScore,
+          percentage: submission.percentage,
+          correctCount: submission.correctCount,
+          totalQuestions: submission.totalQuestions,
+          isPassed: submission.isPassed
+        },
+        // We don't have details in history, so show summary only
+        details: null
+      }
+      
+      showResult.value = true
+      canLeave.value = true
+      showSuccessModal.value = true
+      
+      // Clear localStorage since test is already completed
+      clearStorage()
+    }
+  } catch (error) {
+    console.error('Error checking previous submission:', error)
+  }
+}
 
 // Watch for 403 error and show auth modal immediately
 watch(practiceError, (error) => {
@@ -190,8 +253,13 @@ const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 
 // Start timer when component mounts
 onMounted(() => {
+  // Check if user has submitted this practice before
+  if (isAuthenticated.value) {
+    checkPreviousSubmission()
+  }
+  
   loadSavedData()
-  if (timeLeft.value > 0) {
+  if (timeLeft.value > 0 && !hasSubmittedBefore.value) {
     startTimer()
   }
   
@@ -228,6 +296,12 @@ onBeforeRouteLeave((to, from, next) => {
 })
 
 const startTimer = () => {
+  // Require authentication to start timer
+  if (!isAuthenticated.value) {
+    isAuthModalOpen.value = true
+    return
+  }
+  
   timerInterval.value = setInterval(() => {
     if (timeLeft.value > 0) {
       timeLeft.value--
@@ -272,11 +346,23 @@ const timeColor = computed(() => {
 
 // Answer handlers
 const selectAnswer = (questionId: number, answer: string) => {
+  // Require authentication to answer
+  if (!isAuthenticated.value) {
+    isAuthModalOpen.value = true
+    return
+  }
+  
   userAnswers.value[questionId] = answer
 }
 
 // Checkbox handler
 const toggleCheckbox = (questionId: number, answer: string) => {
+  // Require authentication to answer
+  if (!isAuthenticated.value) {
+    isAuthModalOpen.value = true
+    return
+  }
+  
   const currentAnswers = userAnswers.value[questionId] ? userAnswers.value[questionId].split(',') : []
   const index = currentAnswers.indexOf(answer)
   
@@ -322,7 +408,16 @@ const showLeaveModal = ref(false)
 const showTimeoutModal = ref(false)
 const showSuccessModal = ref(false)
 
+// Result data from auto-grading
+const gradingResult = ref<any>(null)
+
 const handleSubmit = () => {
+  // Require authentication to submit
+  if (!isAuthenticated.value) {
+    isAuthModalOpen.value = true
+    return
+  }
+  
   if (answeredCount.value === 0) {
     alert('Bạn chưa trả lời câu hỏi nào!')
     return
@@ -425,7 +520,7 @@ const confirmSubmit = async () => {
   // console.log('Number of scores:', scores.length)
 
   try {
-    // Call submit API
+    // Call submit API - directly to Strapi
     const headers: any = {
       'Content-Type': 'application/json'
     }
@@ -435,20 +530,30 @@ const confirmSubmit = async () => {
       const token = localStorage.getItem('jwt')
       if (token) {
         headers['Authorization'] = `Bearer ${token}`
-        // console.log('JWT token found:', token?.substring(0, 20) + '...')
       } else {
         console.log('No JWT token found')
       }
     }
 
-    // console.log('Calling API: /api/practice-scorings/submit')
-    const response = await $fetch('/api/practice-scorings/submit', {
+    const apiBase = 'http://127.0.0.1:1337/api'
+    const response = await $fetch(`${apiBase}/practice-scorings/submit`, {
       method: 'POST',
       headers: headers,
       body: payload
     })
 
     console.log('Submit response:', response)
+
+    // Save grading result
+    gradingResult.value = response.data
+    
+    // Debug: log the grading result structure
+    console.log('Grading Result Structure:', {
+      hasSummary: !!gradingResult.value?.summary,
+      hasDetails: !!gradingResult.value?.details,
+      summary: gradingResult.value?.summary,
+      detailsCount: gradingResult.value?.details?.length
+    })
 
     // Clear localStorage after successful submit
     clearStorage()
@@ -457,20 +562,22 @@ const confirmSubmit = async () => {
     showResult.value = true
     canLeave.value = true
     
-    // Show success modal
+    // Show success modal with results
     showSuccessModal.value = true
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error submitting practice:', error)
+    
+    // Check if it's 403 Forbidden (not authenticated)
+    if (error?.statusCode === 403 || error?.status === 403) {
+      isSubmitting.value = false
+      isAuthModalOpen.value = true
+      return
+    }
+    
     isSubmitting.value = false
     
-    // Still clear storage and show result even if API fails
-    clearStorage()
-    showResult.value = true
-    canLeave.value = true
-    showSuccessModal.value = true
-    
-    // Optionally show error message to user
-    alert('Có lỗi khi gửi bài thi. Vui lòng thử lại sau.')
+    // Show error message to user
+    alert('Có lỗi khi gửi bài thi: ' + (error?.message || 'Vui lòng thử lại sau.'))
   }
 }
 
@@ -488,6 +595,81 @@ const handleSuccessExit = () => {
   canLeave.value = true
   navigateTo('/practice')
 }
+
+// Helper to check if question is correct
+const isQuestionCorrect = (questionIndex: number): boolean | null => {
+  if (!gradingResult.value || !gradingResult.value.details) return null
+  const detail = gradingResult.value.details[questionIndex]
+  return detail?.is_correct || false
+}
+
+// Helper to get question result color
+const getQuestionColor = (questionIndex: number): string => {
+  const isCorrect = isQuestionCorrect(questionIndex)
+  if (isCorrect === null) return 'border-gray-200'
+  return isCorrect ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'
+}
+
+// Computed properties for score display
+const displayTotalScore = computed(() => {
+  // Try summary first
+  if (gradingResult.value?.summary?.totalScore !== undefined) {
+    return gradingResult.value.summary.totalScore
+  }
+  // Fallback: calculate from details
+  if (gradingResult.value?.details) {
+    return gradingResult.value.details.reduce((sum: number, detail: any) => sum + (detail.score || 0), 0)
+  }
+  return 0
+})
+
+const displayMaxScore = computed(() => {
+  // Try summary first
+  if (gradingResult.value?.summary?.maxScore !== undefined) {
+    return gradingResult.value.summary.maxScore
+  }
+  // Fallback: calculate from details
+  if (gradingResult.value?.details) {
+    return gradingResult.value.details.reduce((sum: number, detail: any) => sum + (detail.max_score || 0), 0)
+  }
+  return 100
+})
+
+const displayPercentage = computed(() => {
+  // Try summary first
+  if (gradingResult.value?.summary?.percentage !== undefined) {
+    return gradingResult.value.summary.percentage
+  }
+  // Fallback: calculate from scores
+  if (displayMaxScore.value > 0) {
+    return Math.round((displayTotalScore.value / displayMaxScore.value) * 100)
+  }
+  return 0
+})
+
+const displayCorrectCount = computed(() => {
+  // Try summary first
+  if (gradingResult.value?.summary?.correctCount !== undefined) {
+    return gradingResult.value.summary.correctCount
+  }
+  // Fallback: count from details
+  if (gradingResult.value?.details) {
+    return gradingResult.value.details.filter((detail: any) => detail.is_correct).length
+  }
+  return 0
+})
+
+const displayTotalQuestions = computed(() => {
+  // Try summary first
+  if (gradingResult.value?.summary?.totalQuestions !== undefined) {
+    return gradingResult.value.summary.totalQuestions
+  }
+  // Fallback: count details
+  if (gradingResult.value?.details) {
+    return gradingResult.value.details.length
+  }
+  return 0
+})
 
 const resetTest = () => {
   // Clear all answers
@@ -539,9 +721,15 @@ const handleAuthSuccess = async () => {
     }
   }
   
-  // Reload page to refresh header and data with new token
-  if (process.client) {
-    window.location.reload()
+  // Check if user has already submitted this practice
+  await checkPreviousSubmission()
+  
+  // If user hasn't submitted before, allow them to start the test
+  if (!hasSubmittedBefore.value) {
+    loadSavedData()
+    if (timeLeft.value > 0) {
+      startTimer()
+    }
   }
 }
 </script>
@@ -562,22 +750,22 @@ const handleAuthSuccess = async () => {
         <button
           v-if="!showResult"
           @click="handleLeave"
-          class="inline-flex items-center gap-2 text-primary hover:underline mb-4"
+          class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline mb-3"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Quay lại danh sách
+          Quay lại
         </button>
         <NuxtLink
           v-else
           to="/practice" 
-          class="inline-flex items-center gap-2 text-primary hover:underline mb-4"
+          class="inline-flex items-center gap-1.5 text-sm text-primary hover:underline mb-3"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          Quay lại danh sách
+          Quay lại
         </NuxtLink>
 
         <div class="bg-white rounded-xl shadow-lg p-6">
@@ -601,10 +789,34 @@ const handleAuthSuccess = async () => {
       </div>
 
       <!-- Main Content with Sidebar -->
-      <div class="flex gap-6">
+      <div class="flex gap-6 relative">
+        
+        <!-- Auth Required Overlay -->
+        <div v-if="!isAuthenticated" class="absolute inset-0 z-10 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-xl">
+          <div class="text-center p-8 bg-white rounded-xl shadow-2xl max-w-md">
+            <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Yêu cầu đăng nhập</h3>
+            <p class="text-gray-600 mb-6">Bạn cần đăng nhập để làm bài thi này</p>
+            <button
+              @click="isAuthModalOpen = true"
+              class="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+            >
+              Đăng nhập ngay
+            </button>
+          </div>
+        </div>
 
         <!-- Questions - Left Side -->
-        <div class="flex-1 space-y-6 min-w-0">
+        <div class="flex-1 space-y-6 min-w-0"
+          :class="{ 
+            'pointer-events-none select-none': !isAuthenticated,
+            'opacity-60': hasSubmittedBefore && !showResult
+          }"
+        >
           <div 
             v-for="(qa, index) in practice.question_answer" 
             :key="qa.id"
@@ -743,7 +955,9 @@ const handleAuthSuccess = async () => {
         </div>
 
         <!-- Sidebar - Right Side (Fixed) -->
-        <div v-if="!showResult" class="hidden lg:block w-72 flex-shrink-0">
+        <div v-if="!showResult" class="hidden lg:block w-72 flex-shrink-0"
+          :class="{ 'pointer-events-none select-none opacity-50': !isAuthenticated }"
+        >
           <div class="sticky top-6 space-y-3">
             <!-- Timer Card -->
             <div class="bg-white rounded-xl shadow-lg p-4">
@@ -803,23 +1017,35 @@ const handleAuthSuccess = async () => {
                   :href="`#question-${index + 1}`"
                   class="flex items-center justify-between p-2 rounded-lg border transition-all hover:border-primary hover:bg-teal-50"
                   :class="{
-                    'border-green-500 bg-green-50': userAnswers[qa.id],
-                    'border-gray-200': !userAnswers[qa.id]
+                    'border-green-500 bg-green-50': showResult && isQuestionCorrect(index),
+                    'border-red-500 bg-red-50': showResult && isQuestionCorrect(index) === false,
+                    'border-green-400 bg-green-50': !showResult && userAnswers[qa.id],
+                    'border-gray-200': !showResult && !userAnswers[qa.id]
                   }"
                 >
                   <div class="flex items-center gap-2">
                     <div 
                       class="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs"
                       :class="{
-                        'bg-green-500 text-white': userAnswers[qa.id],
-                        'bg-gray-200 text-gray-600': !userAnswers[qa.id]
+                        'bg-green-600 text-white': showResult && isQuestionCorrect(index),
+                        'bg-red-600 text-white': showResult && isQuestionCorrect(index) === false,
+                        'bg-green-500 text-white': !showResult && userAnswers[qa.id],
+                        'bg-gray-200 text-gray-600': !showResult && !userAnswers[qa.id]
                       }"
                     >
                       {{ index + 1 }}
                     </div>
                     <span class="text-xs font-medium text-gray-700">Câu {{ index + 1 }}</span>
                   </div>
-                  <div v-if="userAnswers[qa.id]">
+                  <div v-if="showResult && isQuestionCorrect(index) !== null">
+                    <svg v-if="isQuestionCorrect(index)" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <svg v-else class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                  <div v-else-if="!showResult && userAnswers[qa.id]">
                     <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -892,15 +1118,15 @@ const handleAuthSuccess = async () => {
               <div class="flex gap-3">
                 <button
                   @click="cancelSubmit"
-                  class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all"
+                  class="flex-1 px-4 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all"
                 >
                   Hủy
                 </button>
                 <button
                   @click="confirmSubmit"
-                  class="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-teal-600 text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+                  class="flex-1 px-4 py-2.5 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all"
                 >
-                  Xác nhận
+                  Nộp bài
                 </button>
               </div>
             </div>
@@ -954,13 +1180,13 @@ const handleAuthSuccess = async () => {
               <div class="flex gap-3">
                 <button
                   @click="cancelLeave"
-                  class="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-teal-600 text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+                  class="flex-1 px-4 py-2.5 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all"
                 >
-                  Ở lại làm bài
+                  Ở lại
                 </button>
                 <button
                   @click="confirmLeave"
-                  class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all"
+                  class="flex-1 px-4 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all"
                 >
                   Rời khỏi
                 </button>
@@ -1001,28 +1227,27 @@ const handleAuthSuccess = async () => {
                     <div class="text-sm text-red-800">
                       <p class="font-semibold mb-1">Thông tin:</p>
                       <ul class="space-y-1">
-                        <li>• Bạn đã trả lời: <span class="font-bold">{{ answeredCount }}/{{ totalQuestions }}</span> câu</li>
-                        <li>• Thời gian đã hết</li>
+                        <li>• Số câu đã trả lời: <span class="font-bold">{{ answeredCount }}/{{ totalQuestions }}</span></li>
+                        <li>• Bạn có thể làm lại bài thi này</li>
                       </ul>
                     </div>
                   </div>
                 </div>
-                <p class="text-gray-600 text-base">Bạn có muốn thi lại không?</p>
               </div>
 
               <!-- Buttons -->
               <div class="flex gap-3">
                 <button
-                  @click="handleTimeoutExit"
-                  class="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all"
+                  @click="handleTimeoutRetry"
+                  class="flex-1 px-4 py-2.5 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all"
                 >
-                  Không
+                  Làm lại
                 </button>
                 <button
-                  @click="handleTimeoutRetry"
-                  class="flex-1 px-6 py-3 bg-gradient-to-r from-primary to-teal-600 text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all"
+                  @click="handleTimeoutExit"
+                  class="flex-1 px-4 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all"
                 >
-                  Có
+                  Thoát
                 </button>
               </div>
             </div>
@@ -1037,47 +1262,115 @@ const handleAuthSuccess = async () => {
         <div 
           v-if="showSuccessModal"
           class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          @click.self="handleSuccessExit"
         >
           <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
             <!-- Header -->
             <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-4">
-              <div class="flex items-center justify-center gap-3">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center gap-3">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
+                <h2 class="text-xl font-bold">Hoàn thành bài thi</h2>
               </div>
             </div>
 
-            <!-- Body -->
-            <div class="p-6 text-center">
-              <h2 class="text-2xl font-bold text-gray-900 mb-4">Đã nộp bài thành công!</h2>
-              <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded mb-6">
-                <p class="text-green-800 font-semibold text-lg">
-                  Bạn đã trả lời {{ answeredCount }} / {{ totalQuestions }} câu hỏi
+            <!-- Body with detailed results -->
+            <div class="p-4">
+              <!-- Score Display -->
+              <div class="mb-4 text-center">
+                <div class="flex items-baseline justify-center gap-2 mb-2">
+                  <span class="text-5xl font-bold text-gray-900">{{ displayTotalScore }}</span>
+                  <span class="text-2xl font-semibold text-gray-600">/{{ displayMaxScore }}</span>
+                  <span class="text-xl font-medium text-gray-600">điểm</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                  {{ displayCorrectCount }}/{{ displayTotalQuestions }} câu đúng
+                </div>
+              </div>
+              
+              <!-- Summary Stats -->
+              <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-green-50 border-2 border-green-200 rounded-lg p-3 text-center">
+                  <div class="text-2xl font-bold text-green-600 mb-1">
+                    {{ displayCorrectCount }}
+                  </div>
+                  <div class="text-xs text-green-800 font-semibold">Câu đúng</div>
+                </div>
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg p-3 text-center">
+                  <div class="text-2xl font-bold text-red-600 mb-1">
+                    {{ displayTotalQuestions - displayCorrectCount }}
+                  </div>
+                  <div class="text-xs text-red-800 font-semibold">Câu sai</div>
+                </div>
+              </div>
+
+              <!-- Details Section -->
+              <div v-if="gradingResult?.details" class="mb-4">
+                <h3 class="text-base font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  Chi tiết từng câu
+                </h3>
+                <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                  <div 
+                    v-for="(detail, index) in gradingResult.details" 
+                    :key="index"
+                    class="flex items-center justify-between p-2 rounded-lg border-2"
+                    :class="detail.is_correct ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'"
+                  >
+                    <div class="flex items-center gap-2 flex-1">
+                      <div 
+                        class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs"
+                        :class="detail.is_correct ? 'bg-green-500 text-white' : 'bg-red-500 text-white'"
+                      >
+                        {{ Number(index) + 1 }}
+                      </div>
+                      <div class="flex-1">
+                        <div class="text-xs font-medium text-gray-700">
+                          Câu {{ Number(index) + 1 }}
+                        </div>
+                        <div class="text-xs text-gray-600">
+                          <span class="font-semibold">{{ detail.solution }}</span>
+                          <span v-if="!detail.is_correct" class="ml-1 text-green-600">
+                            (Đáp án: {{ detail.correct_answer }})
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <span class="text-base font-bold" :class="detail.is_correct ? 'text-green-600' : 'text-red-600'">
+                        {{ detail.score }}/{{ detail.max_score }}
+                      </span>
+                      <svg v-if="detail.is_correct" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <svg v-else class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Message -->
+              <div class="bg-blue-50 border-l-4 border-blue-500 p-3 rounded mb-4">
+                <p class="text-blue-800 text-sm font-semibold">
+                  {{ gradingResult?.message || 'Cảm ơn bạn đã hoàn thành bài thi!' }}
                 </p>
               </div>
 
-              <!-- Buttons -->
-              <div class="flex flex-col gap-3">
-                <button
-                  @click="handleSuccessExit"
-                  class="w-full px-6 py-3 bg-gray-600 text-white rounded-xl font-bold hover:bg-gray-700 hover:shadow-lg transition-all inline-flex items-center justify-center gap-2"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                  </svg>
-                  Quay lại danh sách đề thi
-                </button>
-                <button
-                  @click="handleSuccessRetry"
-                  class="w-full px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all inline-flex items-center justify-center gap-2"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  Làm lại
-                </button>
-              </div>
+              <!-- Button -->
+              <button
+                @click="handleSuccessExit"
+                class="w-full px-4 py-2.5 bg-primary text-white rounded-lg font-semibold hover:bg-primary-dark transition-all inline-flex items-center justify-center gap-2"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Quay lại danh sách
+              </button>
             </div>
           </div>
         </div>

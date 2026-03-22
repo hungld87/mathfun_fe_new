@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 
 definePageMeta({
   title: 'Luyện Đề · MathFun',
@@ -8,15 +8,169 @@ definePageMeta({
   ]
 })
 
-// Fetch practices data
-const { data: practicesResponse } = await useAsyncData('practices-list', () => $fetch('/api/mock/practices'))
-const allPractices = computed(() => practicesResponse.value?.data || [])
+// Fetch practices data directly from Strapi backend
+const config = useRuntimeConfig()
+const apiBase = config.public.apiBase
 
-// Fetch filter data
-const { data: filtersResponse } = await useAsyncData('practice-filters', () => $fetch('/api/mock/course-filters'))
-const filterClasses = computed(() => filtersResponse.value?.data?.classes || [])
-const filterSubjects = computed(() => filtersResponse.value?.data?.subjects || [])
-const filterLevels = computed(() => filtersResponse.value?.data?.levels || [])
+const { data: practicesResponse, error: practicesError } = await useAsyncData('practices-list', async () => {
+  try {
+    const response = await $fetch(`${apiBase}/practices/full`)
+    
+    // Transform Strapi data to frontend format
+    const practices = response.data || []
+    return {
+      status: 'ok',
+      data: practices.map((practice: any) => ({
+        id: practice.id,
+        documentId: practice.documentId,
+        slug: practice.slug,
+        title: practice.title,
+        duration_time: practice.duration_time,
+        thumb: practice.thumb?.url || null,
+        class: practice.class ? {
+          id: practice.class.id,
+          documentId: practice.class.documentId,
+          name: practice.class.name,
+          is_highlight: practice.class.is_highlight || false
+        } : null,
+        level: practice.level ? {
+          id: practice.level.id,
+          documentId: practice.level.documentId,
+          title: practice.level.title,
+          description: practice.level.description
+        } : null,
+        subject: practice.subject ? {
+          id: practice.subject.id,
+          documentId: practice.subject.documentId,
+          name: practice.subject.name,
+          isDisplay: practice.subject.isDisplay,
+          icon: practice.subject.icon?.url || null
+        } : null,
+        createdAt: practice.createdAt,
+        updatedAt: practice.updatedAt,
+        publishedAt: practice.publishedAt
+      }))
+    }
+  } catch (error) {
+    console.error('Error fetching practices:', error)
+    return { status: 'error', data: [] }
+  }
+})
+
+const allPractices = computed(() => {
+  // Debug: Log the response
+  if (process.client) {
+    console.log('Practices Response:', practicesResponse.value)
+    if (practicesError.value) {
+      console.error('Practices Error:', practicesError.value)
+    }
+  }
+  return practicesResponse.value?.data || []
+})
+
+// User authentication state - check directly from localStorage
+const isAuthenticated = ref(false)
+
+// Check authentication on client side
+if (process.client) {
+  const token = localStorage.getItem('jwt')
+  isAuthenticated.value = !!token
+}
+
+// User's completed practices (Map of practice documentId -> submission data)
+const completedPractices = ref<Map<string, any>>(new Map())
+
+// Fetch user's completed practices
+const fetchCompletedPractices = async () => {
+  if (!isAuthenticated.value) {
+    completedPractices.value = new Map()
+    return
+  }
+
+  try {
+    // Get all user's submissions
+    const token = localStorage.getItem('jwt')
+    if (!token) {
+      completedPractices.value = new Map()
+      return
+    }
+
+    // Fetch all submissions without filtering by specific practice - call Strapi directly
+    const apiBase = 'http://127.0.0.1:1337/api'
+    const response = await $fetch(`${apiBase}/practice-scorings/my-history`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+
+    // Build a map of practice documentId -> submission
+    const newMap = new Map()
+    if (response?.data && Array.isArray(response.data)) {
+      response.data.forEach((submission: any) => {
+        // API returns practiceId field
+        if (submission.practiceId) {
+          newMap.set(submission.practiceId, submission)
+        }
+      })
+    }
+    
+    completedPractices.value = newMap
+  } catch (error) {
+    console.error('Failed to fetch completed practices:', error)
+    completedPractices.value = new Map()
+  }
+}
+
+// Check if a practice is completed
+const isPracticeCompleted = (documentId: string) => {
+  return completedPractices.value.has(documentId)
+}
+
+// Fetch completed practices on mount and when auth state changes
+onMounted(() => {
+  fetchCompletedPractices()
+  
+  // Listen for auth changes (when user logs in/out)
+  if (process.client) {
+    window.addEventListener('storage', handleStorageChange)
+  }
+})
+
+// Handle storage changes (login/logout in other tabs)
+const handleStorageChange = (e: StorageEvent) => {
+  if (e.key === 'jwt') {
+    const token = e.newValue
+    isAuthenticated.value = !!token
+    fetchCompletedPractices()
+  }
+}
+
+// Cleanup on unmount
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener('storage', handleStorageChange)
+  }
+})
+
+// Fetch filter data from Strapi
+const { data: classesData } = await useAsyncData('filter-classes', async () => {
+  const response = await $fetch(`${apiBase}/classes`)
+  return response.data || []
+})
+
+const { data: subjectsData } = await useAsyncData('filter-subjects', async () => {
+  const response = await $fetch(`${apiBase}/subjects`)
+  return response.data || []
+})
+
+const { data: levelsData } = await useAsyncData('filter-levels', async () => {
+  const response = await $fetch(`${apiBase}/levels`)
+  return response.data || []
+})
+
+const filterClasses = computed(() => classesData.value || [])
+const filterSubjects = computed(() => subjectsData.value || [])
+const filterLevels = computed(() => levelsData.value || [])
 
 // Filters
 const selectedClass = ref('')
@@ -70,9 +224,18 @@ watch([selectedClass, selectedSubject, selectedLevel], () => {
   currentPage.value = 1
 })
 
-// Handle start practice - clear old data
+// Handle start practice - clear old data ONLY if not completed yet
 const startPractice = (slug: string, documentId: string) => {
-  // Get current user email to construct proper storage keys
+  // Check if this practice is already completed
+  const isCompleted = isPracticeCompleted(documentId)
+  
+  // If completed, just navigate to view results (don't clear storage)
+  if (isCompleted) {
+    navigateTo(`/practice/${slug}`)
+    return
+  }
+  
+  // For new attempts: clear localStorage
   let userEmail = 'guest'
   if (process.client) {
     const userStr = localStorage.getItem('user')
@@ -263,16 +426,47 @@ const startPractice = (slug: string, documentId: string) => {
                   </div>
                 </td>
                 <td class="px-6 py-4 text-center">
-                  <button
-                    @click="startPractice(practice.slug, practice.documentId)"
-                    class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary to-teal-600 text-white rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all whitespace-nowrap"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Vào thi
-                  </button>
+                  <div class="flex items-center justify-center gap-2">
+                    <!-- Completed Badge -->
+                    <span 
+                      v-if="isPracticeCompleted(practice.documentId)"
+                      class="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold"
+                    >
+                      <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                      </svg>
+                      Đã hoàn thành
+                    </span>
+                    
+                    <!-- Action Button -->
+                    <button
+                      @click="startPractice(practice.slug, practice.documentId)"
+                      :class="[
+                        'inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all whitespace-nowrap',
+                        isPracticeCompleted(practice.documentId)
+                          ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
+                          : 'bg-gradient-to-r from-primary to-teal-600 text-white'
+                      ]"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path 
+                          v-if="isPracticeCompleted(practice.documentId)"
+                          stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" 
+                        />
+                        <path 
+                          v-else
+                          stroke-linecap="round" 
+                          stroke-linejoin="round" 
+                          stroke-width="2" 
+                          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                        />
+                      </svg>
+                      {{ isPracticeCompleted(practice.documentId) ? 'Xem kết quả' : 'Vào thi' }}
+                    </button>
+                  </div>
                 </td>
               </tr>
 

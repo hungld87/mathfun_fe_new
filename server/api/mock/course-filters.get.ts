@@ -8,10 +8,35 @@ export default defineEventHandler(async (event) => {
   try {
     const response = await axios.get(`${apiBase}/course-fillters/full`)
     
+    // Validate response structure
+    if (!response.data || !response.data.data || !Array.isArray(response.data.data) || response.data.data.length === 0) {
+      console.warn('Invalid course filters response structure')
+      return {
+        status: 'ok',
+        data: {
+          classes: [],
+          levels: [],
+          subjects: []
+        }
+      }
+    }
+
     const rawData = response.data.data[0]
     
+    // Validate rawData has required properties
+    if (!rawData) {
+      return {
+        status: 'ok',
+        data: {
+          classes: [],
+          levels: [],
+          subjects: []
+        }
+      }
+    }
+
     // Transform classes data
-    const classes = rawData.classes.map((cls: any) => ({
+    const classes = (rawData.classes || []).map((cls: any) => ({
       id: cls.id,
       documentId: cls.documentId,
       name: cls.name,
@@ -20,7 +45,7 @@ export default defineEventHandler(async (event) => {
     }))
     
     // Transform levels data
-    const levels = rawData.levels.map((level: any) => ({
+    const levels = (rawData.levels || []).map((level: any) => ({
       id: level.id,
       documentId: level.documentId,
       title: level.title,
@@ -28,15 +53,15 @@ export default defineEventHandler(async (event) => {
     }))
     
     // Transform subjects data
-    const subjects = rawData.subjects
-      ?.filter((subject: any) => subject.isDisplay !== false)
+    const subjects = (rawData.subjects || [])
+      .filter((subject: any) => subject.isDisplay !== false)
       .map((subject: any) => ({
         id: subject.id,
         documentId: subject.documentId,
         name: subject.name,
         isDisplay: subject.isDisplay,
         icon: subject.icon ? `${baseUrl}${subject.icon.url}` : null
-      })) || []
+      }))
     
     return {
       status: 'ok',
@@ -53,7 +78,8 @@ export default defineEventHandler(async (event) => {
       message: 'Failed to fetch course filters',
       data: {
         classes: [],
-        levels: []
+        levels: [],
+        subjects: []
       }
     }
   }

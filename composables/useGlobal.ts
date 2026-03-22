@@ -8,7 +8,7 @@ export const useGlobal = () => {
   // Fetch global config nếu chưa có
   const fetchGlobalConfig = async () => {
     if (!globalConfig.value) {
-      const data = await get('/global')
+      const data = await get('/global/full')
       globalConfig.value = data as GlobalConfig
     }
     return globalConfig.value
